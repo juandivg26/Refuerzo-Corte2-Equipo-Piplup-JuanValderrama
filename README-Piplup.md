@@ -1,6 +1,7 @@
 # AquaPort — Nivel Piplup (MVP)
 
 Reto 1 — Streams & Lambdas: `ConsultorFlota`
+- [x] 5 consultas implementadas solo con Streams
 - Evidencia:
 
   **Ubicación del código:** `Piplup/src/main/java/com/eci/aquaport/ejercicio1/`
@@ -31,8 +32,21 @@ Reto 1 — Streams & Lambdas: `ConsultorFlota`
   ```
 
 Reto 2 — GitHub y GitFlow
-- [ ] Rama develop y feature creadas, PR mergeado
+- [x] Rama develop y feature creadas, PR mergeado
 - Evidencia:
+
+  **Paso a paso:**
+  1. Se creó el repositorio `Refuerzo-Corte2-Equipo-Piplup-JuanValderrama`.
+  2. Se configuró el `.gitignore` para Java/Maven, excluyendo `target/`, `*.class`, `.idea/`.
+  3. Se creó la rama `develop` a partir del commit inicial y se subió con `git push -u origin develop`.
+  4. Desde `develop` se creó la rama `feature/streams-consultor-flota`.
+  5. Se hicieron commits en esa rama, cada uno con una sola responsabilidad:
+     - `feat: implementar ConsultorFlota con 5 consultas Stream (reto 01)`
+     - `refactor: mover pom.xml y READMEs a la raiz, organizar Piplup por ejercicio1`
+     - `docs: agregar evidencia del reto 01 en README-Piplup`
+  6. Se abrió el Pull Request de `feature/streams-consultor-flota` hacia `develop` y se hizo el merge.
+
+  **Pull Request:** https://github.com/juandivg26/Refuerzo-Corte2-Equipo-Piplup-JuanValderrama/pull/1
 
 Reto 3 — Patrones de Diseño: `Mision.Builder`
 - [ ] Builder implementado con validación en build()
