@@ -5,13 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.eci.aquaport</groupId>
-    <artifactId>aquaport-piplup</artifactId>
+    <artifactId>aquaport-refuerzo</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.release>24</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.2</junit.version>
     </properties>
@@ -25,7 +24,14 @@
         </dependency>
     </dependencies>
 
+    <!--
+        NIVEL ACTIVO: Piplup.
+        Cuando empieces Prinplup, cambia las 2 rutas de abajo (sourceDirectory
+        y testSourceDirectory) de "Piplup" a "Prinplup". Y luego a "Empoleon".
+    -->
     <build>
+        <sourceDirectory>${project.basedir}/Piplup/src/main/java</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/Piplup/src/test/java</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
