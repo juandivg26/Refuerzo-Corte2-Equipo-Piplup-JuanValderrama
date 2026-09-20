@@ -49,8 +49,42 @@ Reto 2 — GitHub y GitFlow
   **Pull Request:** https://github.com/juandivg26/Refuerzo-Corte2-Equipo-Piplup-JuanValderrama/pull/1
 
 Reto 3 — Patrones de Diseño: `Mision.Builder`
-- [ ] Builder implementado con validación en build()
+- [x] Builder implementado con validación en build()
 - Evidencia:
+
+  **Ubicación del código:** `Piplup/src/main/java/com/eci/aquaport/ejercicio3/`
+  (`DroneAcuatico.java`, `TipoCarga.java`, `EstadoMision.java`, `Mision.java`, `Main.java`)
+
+  **Paso a paso de la implementación:**
+  1. Se creó el modelo inmutable `Mision` utilizando el patrón de diseño Builder mediante la clase estática interna `Mision.Builder`.
+  2. Se configuraron métodos fluidos para asignar cada atributo (`id`, `drone`, `puntoPartida`, `puntoLlegada`, `tipoCarga`, `estado`). Por defecto, el `estado` se inicializa en `EstadoMision.PENDIENTE`.
+  3. En el método `build()`, se agregaron las validaciones de reglas de negocio antes de retornar la instancia de `Mision`:
+     - `id` no nulo y no vacío (lanzando `IllegalStateException`).
+     - `drone` no nulo y con disponibilidad verificada (`drone.disponible() == true`).
+     - `puntoPartida` y `puntoLlegada` no nulos y no vacíos.
+     - `tipoCarga` obligatorio.
+  4. Se creó la clase `Main` en donde se probaron 4 escenarios: 1 caso exitoso y 3 casos de falla (drone ocupado, punto de llegada vacío e id nulo) usando bloques `try-catch` para verificar el lanzamiento correcto de excepciones.
+  5. Se compiló y ejecutó desde la raíz del repositorio usando Maven:
+     ```bash
+     mvn clean compile
+     mvn exec:java "-Dexec.mainClass=com.eci.aquaport.ejercicio3.Main"
+     ```
+
+  **Salida obtenida (evidencia de ejecución):**
+  ```text
+  === PRUEBA DE BUILDER DE MISION (RETO 03) ===
+
+  1. Prueba con Caso Valido:
+  Mision creada exitosamente: Mision{id='M-101', drone=AR-01 (Aqua-Ranger 100), puntoPartida='Embalse Norte', puntoLlegada='Laboratorio Hidrico', tipoCarga=MUESTRA_AGUA, estado=PENDIENTE}
+
+  2. Prueba de Error: Drone no disponible
+  Excepcion capturada esperada: El drone asignado (AR-03) no esta disponible para la mision.
+
+  3. Prueba de Error: Punto de llegada vacio
+  Excepcion capturada esperada: El punto de llegada es obligatorio y no puede estar vacio.
+
+  4. Prueba de Error: ID nulo
+  Excepcion capturada esperada: El ID de la mision es obligatorio.
 
 Reto 4 — Principios SOLID (SRP y DIP)
 - [ ] RegistradorMisiones, ValidadorMision, NotificadorOperador, RepositorioMisiones
