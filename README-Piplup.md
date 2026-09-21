@@ -87,8 +87,43 @@ Reto 3 — Patrones de Diseño: `Mision.Builder`
   Excepcion capturada esperada: El ID de la mision es obligatorio.
 
 Reto 4 — Principios SOLID (SRP y DIP)
-- [ ] RegistradorMisiones, ValidadorMision, NotificadorOperador, RepositorioMisiones
+- [x] RegistradorMisiones, ValidadorMision, NotificadorOperador, RepositorioMisiones
 - Evidencia:
+
+  **Ubicación del código:** `Piplup/src/main/java/com/eci/aquaport/ejercicio4/`
+  (`DroneAcuatico.java`, `TipoCarga.java`, `EstadoMision.java`, `Mision.java`, `RepositorioMisiones.java`, `RepositorioMisionesEnMemoria.java`, `RegistradorMisiones.java`, `ValidadorMision.java`, `NotificadorOperador.java`, `Main.java`)
+
+  **Diagrama de clases:** 
+
+ 
+
+  **Paso a paso de la implementación:**
+  1. Se copió el modelo base (`DroneAcuatico`, `TipoCarga`, `EstadoMision`, `Mision`) al paquete `ejercicio4` para que cada ejercicio quede autocontenido.
+  2. SRP: se separó la responsabilidad en tres clases:
+     - `RegistradorMisiones`: solo registra y consulta misiones (`registrar`, `buscarPorId`, `listarMisiones`).
+     - `ValidadorMision`: solo aplica reglas de negocio.
+     - `NotificadorOperador`: solo muestra mensajes al operador (`mostrar`).
+  3. DIP: se definió la interfaz `RepositorioMisiones` (`guardar`, `buscarPorId`, `listarTodas`). `RegistradorMisiones` la recibe por constructor (constructor injection) y no conoce la implementación concreta. La implementación `RepositorioMisionesEnMemoria` (guarda en un `Map`) se crea únicamente en `Main`.
+  4. Regla de negocio de `ValidadorMision`: un drone no puede tener más de 1 misión activa simultánea (activa = `PENDIENTE` o `EN_TRANSITO`). Se valida con `filter` + `anyMatch` sobre las misiones ya registradas y lanza `IllegalStateException` si el drone está ocupado.
+  5. `Main` coordina el flujo validar → registrar → notificar, con 3 misiones (la tercera reutiliza `AR-01` para demostrar el rechazo) y dos consultas por id (una existente y una inexistente).
+  6. Se compiló y ejecutó para verificar:
+```
+     mvn clean compile
+     java -cp target\classes com.eci.aquaport.ejercicio4.Main
+```
+
+  **Decisión de diseño:** `ValidadorMision` queda con una sola regla a propósito. Las reglas de batería, punto de llegada, drone no disponible y zona se desarrollan en el reto 12 con TDD (pruebas antes que código).
+
+  **Salida obtenida (evidencia de ejecución):**
+```
+  [OPERADOR] Mision registrada: M-001
+  [OPERADOR] Mision registrada: M-002
+  [OPERADOR] Mision rechazada (M-003): El drone AR-01 ya tiene una mision activa. Un drone no puede tener mas de 1 mision activa simultanea.
+  [OPERADOR] Total de misiones: 2
+  [OPERADOR] Encontrada: Mision{id='M-002', drone=AR-02 (Aqua-Ranger 100), puntoPartida='Canal Central', puntoLlegada='Laguna Sur', tipoCarga=SENSOR, estado=PENDIENTE}
+  [OPERADOR] No existe la mision M-999.
+```
+
 
 Reto 5 — Diagrama de Contexto C4
 - [ ] Diagrama en docs/c4-contexto-piplup.png
