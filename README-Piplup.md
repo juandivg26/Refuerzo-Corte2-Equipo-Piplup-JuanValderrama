@@ -30,6 +30,7 @@ Reto 1 — Streams & Lambdas: `ConsultorFlota`
   Cantidad de disponibles: 3
   Drone con mayor batería: Optional[AR-01 (92)]
   ```
+<img width="1825" height="783" alt="aprobadoejericico1" src="https://github.com/user-attachments/assets/c9b6f9b5-157b-4022-93e0-ba0313093468" />
 
 Reto 2 — GitHub y GitFlow
 - [x] Rama develop y feature creadas, PR mergeado
@@ -85,6 +86,7 @@ Reto 3 — Patrones de Diseño: `Mision.Builder`
 
   4. Prueba de Error: ID nulo
   Excepcion capturada esperada: El ID de la mision es obligatorio.
+<img width="1028" height="453" alt="Aprobadoejercicio3" src="https://github.com/user-attachments/assets/c3c6562d-6072-4d8e-966d-964ab5ca2893" />
 
 Reto 4 — Principios SOLID (SRP y DIP)
 - [x] RegistradorMisiones, ValidadorMision, NotificadorOperador, RepositorioMisiones
@@ -95,7 +97,8 @@ Reto 4 — Principios SOLID (SRP y DIP)
 
   **Diagrama de clases:** 
 
- 
+ <img width="762" height="598" alt="Diagramaejercicico4" src="https://github.com/user-attachments/assets/aee5c771-aa6f-4ba3-aa0f-35b2472246c2" />
+
 
   **Paso a paso de la implementación:**
   1. Se copió el modelo base (`DroneAcuatico`, `TipoCarga`, `EstadoMision`, `Mision`) al paquete `ejercicio4` para que cada ejercicio quede autocontenido.
@@ -123,6 +126,7 @@ Reto 4 — Principios SOLID (SRP y DIP)
   [OPERADOR] Encontrada: Mision{id='M-002', drone=AR-02 (Aqua-Ranger 100), puntoPartida='Canal Central', puntoLlegada='Laguna Sur', tipoCarga=SENSOR, estado=PENDIENTE}
   [OPERADOR] No existe la mision M-999.
 ```
+<img width="836" height="505" alt="Aprobadoejercicio4" src="https://github.com/user-attachments/assets/592906ab-454f-4757-ab69-4fee37acff46" />
 
 
 Reto 5 — Diagrama de Contexto C4
@@ -131,7 +135,8 @@ Reto 5 — Diagrama de Contexto C4
 
   **Ubicación del diagrama:** `docs/c4-contexto-piplup.png` (fuente PlantUML en `docs/c4-contexto-piplup.puml`)
 
-  ![Diagrama de contexto C4 del reto 05](docs/c4-contexto-piplup.png)
+  <img width="370" height="471" alt="Screenshot 2026-09-22 203458" src="https://github.com/user-attachments/assets/7a6ce289-0c20-45bc-9e78-9f8c5d4ba162" />
+
 
   **Paso a paso de la implementación:**
   1. Se identificaron los 3 actores del MVP: `Operador Hidrico` (registra solicitudes y asigna drones manualmente), `Solicitante` (pide el transporte de muestras o sensores) y `Administrador ECI` (gestiona la flota y consulta reportes).
