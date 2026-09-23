@@ -126,9 +126,18 @@ Reto 4 — Principios SOLID (SRP y DIP)
 
 
 Reto 5 — Diagrama de Contexto C4
-- [ ] Diagrama en docs/c4-contexto-piplup.png
+- [x] Diagrama en docs/c4-contexto-piplup.png
 - Evidencia:
 
+  **Ubicación del diagrama:** `docs/c4-contexto-piplup.png` (fuente PlantUML en `docs/c4-contexto-piplup.puml`)
+
+  ![Diagrama de contexto C4 del reto 05](docs/c4-contexto-piplup.png)
+
+  **Paso a paso de la implementación:**
+  1. Se identificaron los 3 actores del MVP: `Operador Hidrico` (registra solicitudes y asigna drones manualmente), `Solicitante` (pide el transporte de muestras o sensores) y `Administrador ECI` (gestiona la flota y consulta reportes).
+  2. Se modeló `AquaPort MVP` como un único sistema (`System`), sin sistemas externos, ya que el MVP opera sin conexiones externas.
+  3. Se definieron los flujos de información en ambos sentidos entre `Operador Hidrico` y `AquaPort MVP` (solicitud/asignación de mision hacia el sistema, confirmación/estado de mision hacia el operador), y entre `Solicitante` y `AquaPort MVP` (solicitud de transporte hacia el sistema, código de mision generado hacia el solicitante). `Administrador ECI` solo tiene flujo hacia el sistema (gestión de flota y consulta de reportes).
+ 
 Reto 6 — RF y RNF
 - [ ] 3 RF + 3 RNF + MoSCoW
 - Evidencia:
