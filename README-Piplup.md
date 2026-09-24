@@ -169,8 +169,85 @@ Reto 6 — RF y RNF
   | RNF-03 Sin bugs/vulnerabilidades en Sonar | Won't Have (por ahora) | Es una meta de mantenimiento a largo plazo; se prioriza la funcionalidad del MVP primero. |
 
 Reto 7 — Plantilla DOSW (RF AP-01)
-- [ ] Plantilla completa
+- [x] Plantilla completa
 - Evidencia:
+Proyecto: AquaPort MVP | DOSW 2026 | Página 1
+AQUAPORT MVP
+Desarrollo y Operaciones de Software
+ANÁLISIS DE REQUERIMIENTOS
+Fecha: 23/09/2026
+Página: 1 de 2
+
+# FUNCIONALIDAD
+
+Código: AP-01
+Nombre: Registrar mision de transporte de muestra
+Descripción: Permite al Operador Hidrico registrar una nueva mision de transporte, asignando un drone acuatico disponible para trasladar una muestra, un sensor o un paquete ligero entre dos puntos.
+Cómo se ejecutará: El operador selecciona un drone disponible desde el panel de flota e ingresa los datos de la mision (punto de partida, punto de llegada y tipo de carga).
+Actor principal: Operador Hidrico
+Precondiciones: Debe existir al menos un drone disponible con bateria >= 35%. El operador debe conocer el punto de partida y el punto de llegada de la mision.
+
+# DATOS DE ENTRADA
+
+| Nombre | Descripción | Tipo de campo | Reglas / Aplicación | Obligatorio |
+|---|---|---|---|---|
+| drone | Drone acuatico asignado a la mision | DroneAcuatico(id:String, modelo:String, bateria:int, disponible:boolean, zona:String) | Debe tener disponible == true y bateria >= 35% | Si |
+| puntoPartida | Lugar donde inicia la mision | String | No puede estar vacio | Si |
+| puntoLlegada | Lugar donde finaliza la mision | String | No puede estar vacio ni ser igual a puntoPartida | Si |
+| tipoCarga | Tipo de carga que transporta el drone | Enum(MUESTRA_AGUA, SENSOR, PAQUETE_LIGERO) | Debe ser uno de los 3 valores definidos | Si |
+
+# DATOS DE SALIDA
+
+| Nombre | Descripción | Tipo de campo | Reglas / Aplicación | Obligatorio |
+|---|---|---|---|---|
+| codigoMision | Identificador unico de la mision creada | String | Generado automaticamente por el sistema, ej. "M-101" | Si |
+| estadoInicial | Estado con el que nace la mision | Enum(PENDIENTE, EN_TRANSITO, ENTREGADA, FALLIDA) | Siempre inicia en PENDIENTE | Si |
+
+# FLUJO BÁSICO
+
+| Paso | Actor | Descripción | Excepciones |
+|---|---|---|---|
+| 1 | Operador Hidrico | Selecciona un drone disponible de la flota. | — |
+| 2 | Operador Hidrico | Ingresa el punto de partida, el punto de llegada y el tipo de carga. | — |
+| 3 | Sistema | Valida que el drone no tenga ya una mision activa (PENDIENTE o EN_TRANSITO). | FA-01 |
+| 4 | Sistema | Construye la mision con estado PENDIENTE y le asigna un codigo unico. | FA-02 |
+| 5 | Sistema | Confirma el registro y retorna el codigo de mision generado al operador. | — |
+
+# FLUJO ALTERNO
+
+| Paso | Actor | Descripción | Excepciones |
+|---|---|---|---|
+| FA-01 | Sistema | Si el drone seleccionado ya tiene una mision activa, el sistema rechaza la asignacion y muestra: "El drone [id] ya tiene una mision activa." | Retorna al paso 1 |
+| FA-02 | Sistema | Si puntoLlegada esta vacio o es igual a puntoPartida, el sistema rechaza la mision y muestra: "El punto de llegada es obligatorio y no puede ser igual al punto de partida." | Retorna al paso 2 |
+
+Proyecto: AquaPort MVP | DOSW 2026 | Página 2
+
+**Notas y comentarios:**
+Esta funcionalidad corresponde al modelo `Mision.Builder` (reto 03) y a `ValidadorMision` (reto 04) implementados en `Piplup/src/main/java/com/eci/aquaport/`.
+
+# ANEXOS
+- Prototipos: pendiente (reto 08, mock del panel de monitoreo de flota).
+
+# REGLAS DE NEGOCIO
+
+| No. | Descripción |
+|---|---|
+| RN-01 | Un drone no puede tener mas de 1 mision activa simultanea. |
+| RN-02 | Solo se pueden asignar drones con disponible == true y bateria >= 35%. |
+
+# ABREVIATURAS
+
+| Abreviatura | Significado |
+|---|---|
+| RF | Requisito Funcional |
+| RN | Regla de Negocio |
+| FA | Flujo Alterno |
+
+# HISTORIAL DE REVISIÓN
+
+| Elaborado por | Aprobado por | Fecha | Descripción y Justificación de Cambios |
+|---|---|---|---|
+| Equipo Piplup | | 23/09/2026 | Versión inicial del documento. |
 
 Reto 8 — Manual de Identidad y UX/UI
 - [ ] Identidad + mock con IA (3 estados)
