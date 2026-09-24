@@ -144,8 +144,29 @@ Reto 5 — Diagrama de Contexto C4
   3. Se definieron los flujos de información en ambos sentidos entre `Operador Hidrico` y `AquaPort MVP` (solicitud/asignación de mision hacia el sistema, confirmación/estado de mision hacia el operador), y entre `Solicitante` y `AquaPort MVP` (solicitud de transporte hacia el sistema, código de mision generado hacia el solicitante). `Administrador ECI` solo tiene flujo hacia el sistema (gestión de flota y consulta de reportes).
  
 Reto 6 — RF y RNF
-- [ ] 3 RF + 3 RNF + MoSCoW
+- [x] 3 RF + 3 RNF + MoSCoW
 - Evidencia:
+
+  **Requisitos Funcionales:**
+  - **RF-01:** El Operador Hidrico puede registrar una mision de transporte especificando drone, origen, destino y tipo de carga; el sistema confirma la creacion con un codigo de mision y estado `PENDIENTE`.
+  - **RF-02:** El Operador Hidrico puede consultar la flota de drones disponibles ordenados por bateria; el sistema retorna la lista filtrada (disponibles con bateria >= 35%).
+  - **RF-03:** El Administrador ECI puede consultar el estado de una mision por su ID; el sistema retorna los datos de la mision o indica que no existe.
+
+  **Requisitos No Funcionales:**
+  - **RNF-01 (Rendimiento):** La consulta de drones disponibles debe retornar resultados en menos de 200ms con una flota de hasta 10 drones, medido con JUnit 5 `assertTimeout`.
+  - **RNF-02 (Cobertura de pruebas):** `ValidadorMision` debe tener una cobertura de pruebas >= 80%, medida con JaCoCo.
+  - **RNF-03 (Mantenibilidad):** El codigo debe compilar sin advertencias de `javac` y sin issues de tipo bug o vulnerability reportados por SonarQube.
+
+  **Clasificacion MoSCoW:**
+
+  | Requisito | Categoria | Justificacion |
+  |---|---|---|
+  | RF-01 Registrar mision | Must Have | Es la funcion central del MVP; sin ella no hay sistema. |
+  | RF-02 Consultar flota disponible | Must Have | El operador necesita esta informacion antes de poder asignar cualquier drone. |
+  | RF-03 Consultar estado de mision | Should Have | Mejora la trazabilidad, pero el MVP funciona sin ella si la mision ya se confirmo al crearla. |
+  | RNF-01 Rendimiento < 200ms | Should Have | Importa para la experiencia de uso, pero no bloquea el funcionamiento con una flota pequena. |
+  | RNF-02 Cobertura >= 80% | Could Have | Es una meta de calidad interna, no algo que el usuario final perciba directamente. |
+  | RNF-03 Sin bugs/vulnerabilidades en Sonar | Won't Have (por ahora) | Es una meta de mantenimiento a largo plazo; se prioriza la funcionalidad del MVP primero. |
 
 Reto 7 — Plantilla DOSW (RF AP-01)
 - [ ] Plantilla completa
