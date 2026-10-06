@@ -287,12 +287,32 @@ Link de Jira: https://mail-team-nyjtgqcj.atlassian.net/jira/software/projects/AQ
 
 
 Reto 10 — Diagrama de Casos de Uso
-- [ ] Diagrama en docs/diagrama-cu-piplup.png
+- [x] Diagrama en docs/diagrama-cu-piplup.png
 - Evidencia:
+<img width="700" height="274" alt="imagen" src="https://github.com/user-attachments/assets/8312f897-cc4e-4fc4-a385-aa215f022087" />
+
+<img width="961" height="471" alt="imagen" src="https://github.com/user-attachments/assets/7b4b751c-236a-4ae8-9e93-c4d83f15a82e" />
+
 
 Reto 11 — Mocks con IA
-- [ ] Proceso de 4 pasos documentado
+- [x] Proceso de 4 pasos documentado
 - Evidencia:
+
+  **Proceso de 4 pasos para generar mocks con IA:**
+
+  **Paso 1 — Definir el contexto y los datos reales antes de escribir el prompt.**
+  Antes de pedirle algo a la IA, se recopilaron los datos exactos que debía mostrar el mock: la paleta de colores y tipografía ya definidas en el Manual de Identidad (reto 08), y los datos reales de la flota de ejemplo (AR-01 a AR-04, con sus baterías y zonas, tomados del reto 01). Esto evita que la IA invente datos genéricos que no coincidan con el resto del proyecto.
+
+  **Paso 2 — Redactar un prompt detallado y estructurado.**
+  Se escribió un prompt especificando: identidad visual exacta (colores en HEX, tipografía), estructura de la pantalla (header, tarjetas resumen, lista de drones), datos exactos a mostrar por cada drone, y el estilo general (flat design, minimalista, sin decoraciones). Un prompt vago ("hazme un dashboard de drones") habría dado un resultado genérico sin coherencia con la identidad del proyecto.
+
+  **Paso 3 — Generar con la herramienta de IA.**
+  Se usó figma para generar el manual de identidad y el mock del panel de monitoreo, a partir del prompt del paso 2.
+
+  **Paso 4 — Validar el resultado contra un criterio objetivo y ajustar.**
+  El mock generado se contrastó contra 5 heurísticas de usabilidad de Nielsen (visibilidad del estado del sistema, coincidencia con el mundo real, consistencia, reconocer antes que recordar, diseño minimalista), documentado en el reto 08. Esto permitió verificar que el resultado de la IA no solo se viera bien, sino que fuera realmente usable, y detectar ajustes necesarios (ej. que los colores de estado coincidieran exactamente con los ya definidos en el código de `ConsultorFlota`).
+
+  **Conclusión:** la IA acelera la generación visual, pero sin un prompt detallado con datos reales (paso 1-2) y sin una validación contra un criterio de usabilidad (paso 4), el resultado queda desconectado del resto del proyecto.
 
 Reto 12 — TDD: `ValidadorMision`
 - [ ] Pruebas antes que código, ciclo Red-Green-Refactor
