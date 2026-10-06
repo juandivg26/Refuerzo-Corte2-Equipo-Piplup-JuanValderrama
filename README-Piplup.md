@@ -142,7 +142,8 @@ Reto 5 — Diagrama de Contexto C4
   1. Se identificaron los 3 actores del MVP: `Operador Hidrico` (registra solicitudes y asigna drones manualmente), `Solicitante` (pide el transporte de muestras o sensores) y `Administrador ECI` (gestiona la flota y consulta reportes).
   2. Se modeló `AquaPort MVP` como un único sistema (`System`), sin sistemas externos, ya que el MVP opera sin conexiones externas.
   3. Se definieron los flujos de información en ambos sentidos entre `Operador Hidrico` y `AquaPort MVP` (solicitud/asignación de mision hacia el sistema, confirmación/estado de mision hacia el operador), y entre `Solicitante` y `AquaPort MVP` (solicitud de transporte hacia el sistema, código de mision generado hacia el solicitante). `Administrador ECI` solo tiene flujo hacia el sistema (gestión de flota y consulta de reportes).
- 
+ <img width="825" height="396" alt="imagen" src="https://github.com/user-attachments/assets/2df91030-4501-4365-bad5-66f0b4705f15" />
+
 Reto 6 — RF y RNF
 - [x] 3 RF + 3 RNF + MoSCoW
 - Evidencia:
