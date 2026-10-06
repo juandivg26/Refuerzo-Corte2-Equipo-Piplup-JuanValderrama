@@ -254,8 +254,30 @@ Esta funcionalidad corresponde al modelo `Mision.Builder` (reto 03) y a `Validad
 <img width="928" height="368" alt="imagen" src="https://github.com/user-attachments/assets/1d18f1b7-ebac-4625-92ae-d53f385770a6" />
 
 Reto 8 — Manual de Identidad y UX/UI
-- [ ] Identidad + mock con IA (3 estados)
+- [x] Identidad + mock con IA (3 estados)
 - Evidencia:
+
+  **Manual de Identidad:**
+
+  **Paleta de colores:**
+  - Azul profundo `#0B3C5D` — color primario (agua, confiabilidad)
+  - Celeste `#1D9A9F` — color secundario/acento (tecnología, drones)
+  - Verde menta `#4CD9B0` — éxito/disponibilidad
+  - Ámbar `#F0A830` — advertencia (batería baja, misión pendiente)
+  - Rojo coral `#E25C5C` — error/no disponible
+
+  **Tipografía:** Inter (bold/semibold para encabezados, regular para cuerpo)
+
+  **Logo (concepto):** ícono de gota de agua combinado con hélice de dron, en azul profundo, acompañando el nombre "AquaPort" en Inter bold.
+
+  **Tono de voz:** directo, técnico, orientado a la acción (ej. "El drone AR-01 ya tiene una misión activa"), sin jerga innecesaria.
+  LINK DE MANUAL DE IDENTIDAD: https://canva.link/r2niavkec9cnzzu 
+  **Panel de monitoreo de la flota acuática
+  <img width="1866" height="882" alt="imagen" src="https://github.com/user-attachments/assets/9af67555-cdad-4658-86ae-c44ed94e6cf9" />
+
+
+  [captura del mock]
+<img width="922" height="375" alt="imagen" src="https://github.com/user-attachments/assets/f455d7f8-9686-4d67-909e-39f3a3f3aa48" />
 
 Reto 9 — Agilismo y Jira
 - [ ] Épica, feature, 3 HU, subtareas
