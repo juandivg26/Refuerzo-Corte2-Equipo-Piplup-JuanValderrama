@@ -164,10 +164,11 @@ Reto 6 — RF y RNF
   |---|---|---|
   | RF-01 Registrar mision | Must Have | Es la funcion central del MVP; sin ella no hay sistema. |
   | RF-02 Consultar flota disponible | Must Have | El operador necesita esta informacion antes de poder asignar cualquier drone. |
-  | RF-03 Consultar estado de mision | Should Have | Mejora la trazabilidad, pero el MVP funciona sin ella si la mision ya se confirmo al crearla. |
+  | RF-03 Consultar estado de mision | Should Have | Mejora la trazabilidad; es secundaria frente al registro y consulta de flota, que son las operaciones principales del MVP. |
   | RNF-01 Rendimiento < 200ms | Should Have | Importa para la experiencia de uso, pero no bloquea el funcionamiento con una flota pequena. |
-  | RNF-02 Cobertura >= 80% | Could Have | Es una meta de calidad interna, no algo que el usuario final perciba directamente. |
-  | RNF-03 Sin bugs/vulnerabilidades en Sonar | Won't Have (por ahora) | Es una meta de mantenimiento a largo plazo; se prioriza la funcionalidad del MVP primero. |
+  | RNF-02 Cobertura >= 80% | Must Have | Es un criterio de aceptacion obligatorio del curso DOSW para aprobar el codigo de negocio (`ValidadorMision`); garantiza la deteccion de regresiones y la validez del sistema desde el MVP, no es opcional. |
+  | RNF-03 Sin bugs/vulnerabilidades en Sonar | Must Have | Un codigo con bugs o vulnerabilidades criticas/bloqueantes no puede considerarse aprobado ni apto para entrega; es un requisito de calidad obligatorio desde el MVP, no se pospone. |
+<img width="940" height="396" alt="imagen" src="https://github.com/user-attachments/assets/a9cb8608-ace7-4484-a3d0-644ab0ca1abc" />
 
 Reto 7 — Plantilla DOSW (RF AP-01)
 - [x] Plantilla completa
@@ -249,6 +250,8 @@ Esta funcionalidad corresponde al modelo `Mision.Builder` (reto 03) y a `Validad
 | Elaborado por | Aprobado por | Fecha | Descripción y Justificación de Cambios |
 |---|---|---|---|
 | Equipo Piplup | | 23/09/2026 | Versión inicial del documento. |
+| Equipo Piplup | | 2026-10-06 | RNF-02 y RNF-03 reclasificados de Could Have/Won't Have a Must Have tras revision tecnica. |
+<img width="928" height="368" alt="imagen" src="https://github.com/user-attachments/assets/1d18f1b7-ebac-4625-92ae-d53f385770a6" />
 
 Reto 8 — Manual de Identidad y UX/UI
 - [ ] Identidad + mock con IA (3 estados)
