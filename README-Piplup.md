@@ -280,8 +280,11 @@ Reto 8 — Manual de Identidad y UX/UI
 <img width="922" height="375" alt="imagen" src="https://github.com/user-attachments/assets/f455d7f8-9686-4d67-909e-39f3a3f3aa48" />
 
 Reto 9 — Agilismo y Jira
-- [ ] Épica, feature, 3 HU, subtareas
+- [x] Épica, feature, 3 HU, subtareas
 - Evidencia:
+Link de Jira: https://mail-team-nyjtgqcj.atlassian.net/jira/software/projects/AQ/boards/71/backlog?atlOrigin=eyJpIjoiNzk3YzJiMTIwY2M0NGY2MzgxNDFlOWM3ZGExZDA4NWIiLCJwIjoiaiJ9
+<img width="938" height="517" alt="imagen" src="https://github.com/user-attachments/assets/edee31f6-0736-4245-99e8-70d9d2e2ed35" />
+
 
 Reto 10 — Diagrama de Casos de Uso
 - [ ] Diagrama en docs/diagrama-cu-piplup.png
