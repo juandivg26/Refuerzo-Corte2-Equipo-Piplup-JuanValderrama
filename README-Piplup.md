@@ -333,8 +333,23 @@ Reto 12 — TDD: `ValidadorMision`
 
 
 Reto 13 — JaCoCo
-- [ ] Cobertura ≥80% en ValidadorMision
+- [x] Cobertura ≥80% en ValidadorMision
 - Evidencia:
+
+  **Paso a paso:**
+  1. El plugin `jacoco-maven-plugin` ya estaba configurado en el `pom.xml` (goals `prepare-agent` y `report`, atados a la fase `test`).
+  2. Se corrió `mvn clean test`, lo que ejecuta las 9 pruebas de `ValidadorMisionTest` y genera automáticamente el reporte HTML en `target/site/jacoco/index.html`.
+  3. Se abrió el reporte y se navegó hasta el paquete `com.eci.aquaport.ejercicio12` → clase `ValidadorMision`.
+
+  **Resultado obtenido:**
+  | Métrica | Cobertura |
+  |---|---|
+  | Instrucciones (líneas) | **84%** |
+  | Ramas (branches) | 70% |
+
+  La cobertura de instrucciones/líneas de `ValidadorMision` es del **84%**, superando el mínimo de 80% exigido por el reto. Esto se logró con 9 pruebas unitarias (ver reto 12) que cubren: batería suficiente/insuficiente, punto de llegada nulo/vacío, drone no disponible, zona inválida, misión nula, caso feliz completo, y drone con misión activa.
+
+ 
 
 Reto 14 — SonarQube
 - [ ] 0 bugs, 0 vulnerabilidades, deuda técnica 0
