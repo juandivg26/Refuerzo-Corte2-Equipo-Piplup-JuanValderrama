@@ -315,8 +315,22 @@ Reto 11 — Mocks con IA
   **Conclusión:** la IA acelera la generación visual, pero sin un prompt detallado con datos reales (paso 1-2) y sin una validación contra un criterio de usabilidad (paso 4), el resultado queda desconectado del resto del proyecto.
 
 Reto 12 — TDD: `ValidadorMision`
-- [ ] Pruebas antes que código, ciclo Red-Green-Refactor
+- [x] Pruebas antes que código, ciclo Red-Green-Refactor
 - Evidencia:
+
+  **Ubicación del código:** `Piplup/src/main/java/com/eci/aquaport/ejercicio12/`
+  (`DroneAcuatico.java`, `Mision.java`, `EstadoMision.java`, `TipoCarga.java`, `ValidadorMision.java`)
+  **Ubicación de las pruebas:** `Piplup/src/test/java/com/eci/aquaport/ejercicio12/ValidadorMisionTest.java`
+
+  **Paso a paso del ciclo TDD:**
+  1. **Red:** se copió el modelo base (`DroneAcuatico`, `Mision`, `EstadoMision`, `TipoCarga`) desde `ejercicio4` al paquete `ejercicio12`, y se escribió `ValidadorMisionTest.java` con 8 pruebas que referencian métodos que aún no existían en `ValidadorMision` (`tieneBateriaSuficiente`, `validarPuntoLlegada`, `validarDroneDisponible`, `validarZona`) — el proyecto no compilaba, confirmando el estado Red.
+  2. **Green:** se implementó cada método con la lógica mínima necesaria para que su prueba correspondiente pasara.
+  3. **Refactor:** se integraron todas las reglas dentro del método `validar(Mision, List<Mision>)`, que ahora valida disponibilidad del drone, punto de llegada, zona y batería suficiente, además de la regla ya existente de "drone sin misión activa" (heredada de `ejercicio4`). Las 8 pruebas se mantuvieron pasando durante el refactor, confirmando que no se rompió el comportamiento.
+
+<img width="881" height="402" alt="imagen" src="https://github.com/user-attachments/assets/41afcb3b-8a9c-41df-aa35-44c396b3e18c" />
+
+<img width="867" height="551" alt="imagen" src="https://github.com/user-attachments/assets/8a8fda4d-50b8-4062-9f50-1b4a047d6d7a" />
+
 
 Reto 13 — JaCoCo
 - [ ] Cobertura ≥80% en ValidadorMision
