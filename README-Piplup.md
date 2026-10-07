@@ -350,6 +350,9 @@ Reto 13 — JaCoCo
   La cobertura de instrucciones/líneas de `ValidadorMision` es del **84%**, superando el mínimo de 80% exigido por el reto. Esto se logró con 9 pruebas unitarias (ver reto 12) que cubren: batería suficiente/insuficiente, punto de llegada nulo/vacío, drone no disponible, zona inválida, misión nula, caso feliz completo, y drone con misión activa.
 
  
+<img width="882" height="561" alt="imagen" src="https://github.com/user-attachments/assets/6cfed7cf-ddfb-4581-ac79-fb6e13617638" />
+<img width="846" height="371" alt="imagen" src="https://github.com/user-attachments/assets/5324fe57-b932-4aab-8dfd-6a945b8fca94" />
+
 
 Reto 14 — SonarQube
 - [ ] 0 bugs, 0 vulnerabilidades, deuda técnica 0
