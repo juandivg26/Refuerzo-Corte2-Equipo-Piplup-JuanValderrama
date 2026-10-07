@@ -355,5 +355,8 @@ Reto 13 — JaCoCo
 
 
 Reto 14 — SonarQube
-- [ ] 0 bugs, 0 vulnerabilidades, deuda técnica 0
+- [x] 0 bugs, 0 vulnerabilidades, deuda técnica 0
 - Evidencia:
+
+<img width="653" height="635" alt="imagen" src="https://github.com/user-attachments/assets/2066b18c-26da-47df-be0a-e0aabbb17324" />
+<img width="868" height="401" alt="imagen" src="https://github.com/user-attachments/assets/a00c01a2-76c2-4cb6-8e35-c6fec8a184d7" />
