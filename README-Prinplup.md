@@ -52,14 +52,31 @@ Reto 1 — Streams & Lambdas: `ConsultorFlota` v2
   ```
 
 Reto 2 — GitHub y GitFlow (release y tag)
-- [ ] Features con PR a develop, release/v2.0, merge a main con tag v2.0.0
+- [x] Features con PR a Develop, release/v2.0, merge a main con tag v2.0.0
 - Evidencia:
+
+  **Paso a paso:**
+  1. Se marcó la v1.0 (MVP Piplup) en `main` con el tag `v1.0.0`.
+  2. Desde `Develop` se trabajó cada funcionalidad de la v2 en su propia rama `feature/`, con commits atómicos (`feat:`, `test:`, `build:`, `docs:`).
+  3. Cada feature se integró a `Develop` con su Pull Request:
+
+  | PR | Rama | Contenido |
+  |---|---|---|
+  | [#7](https://github.com/juandivg26/Refuerzo-Corte2-Equipo-Piplup-JuanValderrama/pull/7) | `feature/streams-flota-v2` | Reto 01 + activar Prinplup en el pom |
+  | [#8](https://github.com/juandivg26/Refuerzo-Corte2-Equipo-Piplup-JuanValderrama/pull/8) | `feature/factory-drones` | Reto 03: Factory Method |
+  | [#9](https://github.com/juandivg26/Refuerzo-Corte2-Equipo-Piplup-JuanValderrama/pull/9) | `feature/asignacion-automatica` | Reto 03: Strategy |
+  | [#10](https://github.com/juandivg26/Refuerzo-Corte2-Equipo-Piplup-JuanValderrama/pull/10) | `feature/alertas-centro-control` | Reto 03: Observer + Mockito |
+  | [#11](https://github.com/juandivg26/Refuerzo-Corte2-Equipo-Piplup-JuanValderrama/pull/11) | `feature/tdd-asignador` | Reto 12: TDD |
+  | [#12](https://github.com/juandivg26/Refuerzo-Corte2-Equipo-Piplup-JuanValderrama/pull/12) | `feature/quality-gate-jacoco` | Reto 13: quality gate |
+
+  4. Desde `Develop` se creó `release/v2.0` con un commit de ajuste (versión `2.0.0` en el `pom.xml` y esta documentación). En una rama release solo entran ajustes y bugfixes, nada de funcionalidades nuevas.
+  5. `release/v2.0` se integró a `main` con Pull Request, se creó el tag `v2.0.0` sobre `main` y `main` se volvió a integrar a `Develop` para que ambas ramas queden alineadas.
 
   **Ramas de la v2:**
   ```
   main ─────●─────────────────────────────────────────────●── v2.0.0
             v1.0.0                                        ↑
-  develop ──●──●──────●──────●──────●──────●──────●───────┤
+  Develop ──●──●──────●──────●──────●──────●──────●───────┤
                ↑      ↑      ↑      ↑      ↑      ↑       │
                │      │      │      │      │      │   release/v2.0
                │      │      │      │      │      └─ feature/quality-gate-jacoco
