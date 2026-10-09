@@ -1,10 +1,13 @@
 package com.eci.aquaport.ejercicio12;
 
 import java.util.List;
+import java.util.Set;
 
 public class ValidadorMision {
 
     private static final int BATERIA_MINIMA = 35;
+    private static final Set<String> ZONAS_VALIDAS = Set.of(
+            "Embalse Norte", "Canal Central", "Laguna Sur", "Punto Ribereño Este", "Laboratorio Hídrico");
 
     public void validar(Mision nueva, List<Mision> registradas) {
         if (nueva == null) {
@@ -12,7 +15,7 @@ public class ValidadorMision {
         }
         validarDroneDisponible(nueva.getDrone());
         validarPuntoLlegada(nueva.getPuntoLlegada());
-        validarZona(nueva.getDrone().zona());
+        validarZona(nueva.getPuntoLlegada());
         if (!tieneBateriaSuficiente(nueva.getDrone())) {
             throw new IllegalStateException("El drone " + nueva.getDrone().id()
                     + " no tiene bateria suficiente (minimo " + BATERIA_MINIMA + "%).");
@@ -45,8 +48,8 @@ public class ValidadorMision {
     }
 
     public void validarZona(String zona) {
-        if (zona == null || zona.isBlank()) {
-            throw new IllegalArgumentException("La zona no puede ser nula ni vacia.");
+        if (zona == null || !ZONAS_VALIDAS.contains(zona)) {
+            throw new IllegalArgumentException("La zona \"" + zona + "\" no es una de las zonas fijas del campus.");
         }
     }
 
