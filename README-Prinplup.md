@@ -301,7 +301,7 @@ Implementado en `AsignadorAutomatico`, `ValidadorMision`, `EstrategiaSeleccion` 
 | Equipo Piplup | | 09/10/2026 | Versión inicial del documento para la v2. |
 
 Reto 8 — Identidad y UX
-- [ ] Tarjeta de drone con 6 estados, flujo de 3 pantallas, Fitts y Hick
+- [x] Tarjeta de drone con 6 estados, flujo de 3 pantallas, Fitts y Hick
 - Evidencia:
 
   **Sistema de diseño v2** (extiende el manual de identidad de Piplup, reto 08):
@@ -334,6 +334,7 @@ Reto 8 — Identidad y UX
 <img width="1496" height="657" alt="Screenshot 2026-10-09 182916" src="https://github.com/user-attachments/assets/2e252691-f29d-4c11-9480-85065d06b49a" />
 <img width="1181" height="763" alt="Screenshot 2026-10-09 183212" src="https://github.com/user-attachments/assets/9cb96846-8e74-4b3a-938c-04ec03df98a5" />
 
+<img width="908" height="546" alt="imagen" src="https://github.com/user-attachments/assets/fb9f81a4-dac4-46b6-94c2-1844452ba647" />
 
 Reto 9 — Agilismo y Jira
 - [x] Sprint con Story Points y DoD
@@ -367,54 +368,15 @@ Reto 9 — Agilismo y Jira
   - JaCoCo reporta ≥ 80% de line coverage para la feature.
   - El PR tiene revisión aprobada por al menos otro miembro.
   - El diagrama C4 y la plantilla DOSW están actualizados.
+<img width="848" height="497" alt="imagen" src="https://github.com/user-attachments/assets/8c0ed31c-dbc9-4d4f-b67f-3c12915f2730" />
 
 Reto 10 — Diagrama de Casos de Uso v2
-- [ ] Nuevo actor, include y extend
+- [x] Nuevo actor, include y extend
 - Evidencia:
 
-  **Fuente PlantUML:**
-  ```plantuml
-  @startuml
-  left to right direction
-  skinparam packageStyle rectangle
+<img width="1055" height="433" alt="imagen" src="https://github.com/user-attachments/assets/e91753a3-acfb-4b32-b314-6658ed91de4d" />
 
-  actor "Usuario ECI" as base
-  actor "Operador Hidrico" as operador
-  actor "Administrador ECI" as admin
-  actor "Solicitante" as solicitante
-  actor "Tecnico de Mantenimiento" as tecnico
-  actor "Centro de Control" as centro <<sistema>>
-
-  operador --|> base
-  admin --|> base
-
-  rectangle "AquaPort v2" {
-    usecase "Solicitar transporte" as UC1
-    usecase "Asignar mision automaticamente" as UC2
-    usecase "Validar condiciones hidricas" as UC3
-    usecase "Notificar fallo al tecnico" as UC4
-    usecase "Consultar estado de la flota" as UC5
-    usecase "Cambiar estrategia de seleccion" as UC6
-    usecase "Gestionar drones de la flota" as UC7
-    usecase "Atender drone en FALLO" as UC8
-  }
-
-  solicitante --> UC1
-  UC1 ..> UC2 : <<include>>
-  UC2 ..> UC3 : <<include>>
-  UC4 ..> UC2 : <<extend>>
-  note right of UC4
-    Condicion: hay un drone en
-    estado FALLO durante la asignacion
-  end note
-  UC2 --> centro
-  base --> UC5
-  operador --> UC6
-  admin --> UC7
-  tecnico --> UC8
-  UC4 --> tecnico
-  @enduml
-  ```
+<img width="831" height="644" alt="imagen" src="https://github.com/user-attachments/assets/f3f995c2-9bf5-4f7b-8e99-b8e9170f4017" />
 
   **Decisiones del diagrama:**
   - `<<include>>` "Validar condiciones hídricas": siempre ocurre; sin validar el agua no se puede asignar.
@@ -422,10 +384,16 @@ Reto 10 — Diagrama de Casos de Uso v2
   - Generalización: Operador Hídrico y Administrador ECI heredan del actor base "Usuario ECI" el CU "Consultar estado de la flota"; cada uno conserva sus CU propios.
 
 Reto 11 — Mocks con IA
-- [ ] 3 pantallas + alerta, 4 prompts
+- [x] 3 pantallas + alerta, 4 prompts
 - Evidencia:
+<img width="1500" height="573" alt="Screenshot 2026-10-09 182834" src="https://github.com/user-attachments/assets/8078cb2d-7847-4dff-9dfe-0e9c2a9e2c95" />
+<img width="1486" height="787" alt="Screenshot 2026-10-09 182850" src="https://github.com/user-attachments/assets/c55fb59d-bb80-4baa-8d20-680720e0487c" />
+<img width="1496" height="657" alt="Screenshot 2026-10-09 182916" src="https://github.com/user-attachments/assets/ca622271-579c-4a74-bb03-580ee10c5791" />
+<img width="1181" height="763" alt="Screenshot 2026-10-09 183212" src="https://github.com/user-attachments/assets/6919d747-6141-4adc-a0dd-43a99e463b6f" />
+<img width="1180" height="881" alt="Screenshot 2026-10-09 183352" src="https://github.com/user-attachments/assets/277b72e8-20ed-4dc1-ad92-0489811cc6cd" />
 
-  **Herramienta:** Figma Make (el mismo Figma del reto 08 de Piplup). Cada prompt empieza con el mismo bloque de estilo para que todas las pantallas queden coherentes con la identidad.
+<img width="997" height="690" alt="imagen" src="https://github.com/user-attachments/assets/f9b0198a-f27f-400d-998f-dc97d37ec5eb" />
+
 
   **Bloque de estilo (va al inicio de cada prompt):**
   ```
@@ -525,6 +493,7 @@ Reto 12 — TDD con Mockito: `AsignadorAutomatico`
   | Regla del buceador | `buceador_cargaMayorA300_noEsCandidato` | Con 301 g el buceador queda fuera. |
 
   **Cobertura de `AsignadorAutomatico` (ejercicio12):** 100% de líneas y 100% de ramas.
+<img width="910" height="514" alt="imagen" src="https://github.com/user-attachments/assets/c2c5652a-adc5-4a58-bddc-cc1af3812f93" />
 
 Reto 13 — JaCoCo con Quality Gate
 - [x] El build falla si la cobertura baja del 80%
@@ -555,6 +524,7 @@ Reto 13 — JaCoCo con Quality Gate
   | Líneas (total) | **98.5%** |
   | Ramas (total) | **100%** |
   | Clase con menor cobertura | `ejercicio12.DroneAcuatico` — 86% de líneas |
+<img width="870" height="499" alt="imagen" src="https://github.com/user-attachments/assets/44f18f40-dbdb-4c49-862b-ec2ab1b784a6" />
 
 Reto 14 — SonarQube
 - [ ] 0 bugs, 0 vulnerabilidades, deuda < 30 min, duplicación < 5%
