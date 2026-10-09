@@ -304,9 +304,64 @@ Reto 8 — Identidad y UX
 - [ ] Tarjeta de drone con 6 estados, flujo de 3 pantallas, Fitts y Hick
 - Evidencia:
 
+  **Sistema de diseño v2** (extiende el manual de identidad de Piplup, reto 08):
+  | Token | Valor |
+  |---|---|
+  | Primario | Azul profundo `#0B3C5D` |
+  | Acento | Celeste `#1D9A9F` |
+  | Disponible | Verde menta `#4CD9B0` |
+  | En misión | Azul `#2F80ED` |
+  | Recargando | Ámbar `#F0A830` |
+  | Mantenimiento | Gris `#8A94A6` |
+  | Fallo | Rojo coral `#E25C5C` |
+  | Sumergido (nuevo en v2) | Azul oscuro `#1B2A6B` |
+  | Tipografía | Inter (interfaz) + JetBrains Mono (IDs `AR-XX`, códigos `M-XXX`) |
+
+  | Componente | Estados |
+  |---|---|
+  | Tarjeta de drone acuático | Disponible, En misión, Recargando, Mantenimiento, Fallo, Sumergido |
+  | Botón "Asignar misión" | Default, hover, procesando (spinner), éxito, deshabilitado |
+  | Indicador de batería | ≥ 60% verde, 35-59% ámbar, < 35% rojo con ícono de advertencia |
+
+  **Leyes UX aplicadas:**
+  - **Fitts:** el botón de emergencia "Detener misión" es el más grande de la pantalla (mínimo 48 px de alto), en rojo y anclado en la esquina inferior derecha, la zona más fácil de alcanzar. Los botones destructivos quedan lejos de "Asignar" para evitar clics por error.
+  - **Hick:** los 15 drones no se muestran como una sola lista; se agrupan en 3 columnas por tipo (Superficial, Semisumergido, Buceador) con 5 tarjetas cada una. El operador primero elige entre 3 grupos y luego entre 5 drones, en vez de decidir entre 15 opciones a la vez.
+  - **Miller:** cada tarjeta muestra solo 4 datos (ID, tipo, batería, estado), dentro del límite de 7 ± 2 elementos.
+
+  Los prompts usados para generar la tarjeta y el flujo de 3 pantallas están en el reto 11.
+
 Reto 9 — Agilismo y Jira
-- [ ] Sprint con Story Points y DoD
+- [x] Sprint con Story Points y DoD
 - Evidencia:
+
+  **Link de Jira:** https://mail-team-nyjtgqcj.atlassian.net/jira/software/projects/AQ/boards/71
+
+  **Jerarquía de la v2:**
+  - **Épica AQ-18:** AquaPort v2 — Flota autónoma con asignación automática y alertas.
+  - **Feature AQ-19:** Asignación automática de drones por zona.
+  - **Feature AQ-20:** Alertas al centro de control.
+
+  **Sprint activo:** `AQ Sprint v2 — Prinplup` (09/10/2026 – 23/10/2026)
+  **Sprint Goal:** "Completar el asignador automático con Strategy y las alertas con Observer"
+
+  | HU | Historia de usuario | Feature | Story Points |
+  |---|---|---|---|
+  | AQ-21 | Como administrador ECI, quiero registrar drones de los 3 tipos con su capacidad de carga, para que el sistema sepa qué carga puede llevar cada uno. | AQ-19 | 3 |
+  | AQ-22 | Como operador hídrico, quiero que el sistema asigne automáticamente el drone más adecuado según zona, carga y batería, para no tener que elegirlo manualmente entre 15 drones. | AQ-19 | 8 |
+  | AQ-23 | Como operador hídrico, quiero elegir la estrategia de selección, para adaptar la asignación a la operación del día sin modificar el asignador. | AQ-19 | 5 |
+  | AQ-24 | Como solicitante, quiero que mis misiones CRÍTICAS tengan prioridad absoluta, para que las muestras urgentes no esperen. | AQ-19 | 5 |
+  | AQ-25 | Como centro de control, quiero recibir una alerta cuando un drone entra en FALLO, para saberlo de inmediato y que la misión no se pierda. | AQ-20 | 5 |
+  | AQ-26 | Como técnico de mantenimiento, quiero ser notificado del drone en FALLO con su tipo y zona, para ir a revisarlo sin consultar el panel. | AQ-20 | 2 |
+  | | | **Total** | **28** |
+
+  **Estimación (Fibonacci):** AQ-22 vale 8 porque concentra la lógica central: filtrar candidatos, delegar a la estrategia y cambiar de estado, con más casos borde. AQ-26 vale 2 porque reutiliza el Observer de AQ-25 y solo agrega un observador.
+
+  **Definition of Done de la v2** (también registrado en la descripción de la épica AQ-18):
+  - El código compila sin warnings.
+  - Las pruebas unitarias pasan (JUnit 5).
+  - JaCoCo reporta ≥ 80% de line coverage para la feature.
+  - El PR tiene revisión aprobada por al menos otro miembro.
+  - El diagrama C4 y la plantilla DOSW están actualizados.
 
 Reto 10 — Diagrama de Casos de Uso v2
 - [ ] Nuevo actor, include y extend
@@ -364,6 +419,82 @@ Reto 10 — Diagrama de Casos de Uso v2
 Reto 11 — Mocks con IA
 - [ ] 3 pantallas + alerta, 4 prompts
 - Evidencia:
+
+  **Herramienta:** Figma Make (el mismo Figma del reto 08 de Piplup). Cada prompt empieza con el mismo bloque de estilo para que todas las pantallas queden coherentes con la identidad.
+
+  **Bloque de estilo (va al inicio de cada prompt):**
+  ```
+  Actúa como diseñador UX/UI senior de sistemas de monitoreo ambiental.
+  SISTEMA: AquaPort v2 — panel de control de una flota de 15 drones acuáticos de la Escuela Colombiana de Ingeniería.
+  ESTILO: dashboard técnico, fondo oscuro #0B1622, superficies #12202E, primario #0B3C5D, acento #1D9A9F.
+  Tipografía Inter para la interfaz y JetBrains Mono para IDs de drones (AR-01…AR-15) y códigos de misión (M-301).
+  COLORES DE ESTADO: Disponible #4CD9B0, En misión #2F80ED, Recargando #F0A830, Mantenimiento #8A94A6, Fallo #E25C5C, Sumergido #1B2A6B.
+  BATERÍA: ≥60% verde, 35-59% ámbar, <35% rojo con ícono de advertencia.
+  Diseño minimalista, flat, sin ilustraciones decorativas. Textos en español.
+  ```
+
+  **Prompt 0 — Componente "Tarjeta de drone acuático" (reto 08):**
+  ```
+  [bloque de estilo]
+  Diseña el componente "Tarjeta de drone acuático" en sus 6 estados, uno al lado del otro:
+  Disponible, En misión, Recargando, Mantenimiento, Fallo y Sumergido.
+  Cada tarjeta muestra solo: ID en JetBrains Mono (ej. AR-07), tipo (Superficial / Semisumergido / Buceador),
+  indicador de batería en % con su color, zona actual y una etiqueta del estado con su color.
+  El estado Fallo tiene borde rojo de 2 px y un ícono de alerta. Agrega debajo el botón "Asignar misión"
+  en sus 5 estados: default, hover, procesando (spinner), éxito y deshabilitado.
+  ```
+
+  **Prompt 1 — Pantalla 1: Panel de flota:**
+  ```
+  [bloque de estilo]
+  PANTALLA: Panel de flota (vista principal del Operador Hídrico).
+  Muestra los 15 drones agrupados en 3 columnas por tipo: Superficial (AR-01 a AR-05), Semisumergido (AR-06 a AR-10)
+  y Buceador (AR-11 a AR-15), usando la tarjeta de drone. Arriba, 4 indicadores: drones disponibles, en misión,
+  en fallo y misiones pendientes. A la derecha, la cola de misiones ordenada por prioridad (CRÍTICA arriba en rojo).
+  Muestra un selector de estrategia activa: "Mayor batería" / "Zona cercana".
+  Botón de emergencia "Detener misión" grande, rojo, anclado abajo a la derecha (Ley de Fitts).
+  ```
+
+  **Prompt 2 — Pantalla 2: Detalle de misión con drone recomendado:**
+  ```
+  [bloque de estilo]
+  PANTALLA: Detalle de la misión M-301.
+  Datos de la misión: zona destino Laguna Sur, carga EQUIPO_MEDICION de 1200 g, prioridad ALTA.
+  Panel "Drone recomendado por el sistema": AR-09, Semisumergido, batería 83%, zona Laboratorio Hídrico.
+  Bloque "¿Por qué este drone?" con 3 viñetas: capacidad 1500 g ≥ 1200 g; batería 83% ≥ 35%;
+  estrategia activa "Zona cercana".
+  Bloque "Descartados": AR-07 (en FALLO), Buceadores (capacidad 300 g insuficiente).
+  Botones: "Confirmar asignación" (primario) y "Cancelar" (secundario, separado).
+  ```
+
+  **Prompt 3 — Pantalla 3: Confirmación de asignación:**
+  ```
+  [bloque de estilo]
+  PANTALLA: Confirmación de asignación.
+  Mensaje de éxito: "Misión M-301 asignada a AR-09" con código de misión en JetBrains Mono.
+  Debajo, la flota actualizada agrupada por tipo, donde AR-09 ahora aparece en estado En misión (azul)
+  y AR-07 sigue en Fallo (rojo). Línea de tiempo corta: Solicitud recibida → Drone seleccionado →
+  Centro de Control notificado. Botón "Volver al panel de flota".
+  ```
+
+  **Prompt 4 — Estado de alerta: misión CRÍTICA sin drone:**
+  ```
+  [bloque de estilo]
+  PANTALLA: Panel de flota en estado de ALERTA.
+  Banner rojo superior fijo: "Misión CRÍTICA M-303 sin drone disponible — carga de 2000 g supera la capacidad
+  de toda la flota". Botones en el banner: "Notificar al Centro de Control" y "Ver misión".
+  La misión M-303 aparece primera en la cola, resaltada en rojo. En la flota, AR-07 en Fallo con borde rojo
+  y la etiqueta "Técnico notificado". El resto de la pantalla igual al panel de flota.
+  ```
+
+  **Heurísticas de Nielsen que deben cumplir las pantallas:**
+  | # | Heurística | Dónde se ve |
+  |---|---|---|
+  | 1 | Visibilidad del estado del sistema | Colores de estado en cada tarjeta y banner de alerta siempre visible. |
+  | 3 | Control y libertad del usuario | "Cancelar" en el detalle de misión y "Detener misión" de emergencia. |
+  | 5 | Prevención de errores | Drones con batería < 35% y tipos sin capacidad aparecen como descartados antes de confirmar. |
+  | 8 | Diseño minimalista | Cada tarjeta solo muestra ID, tipo, batería y estado. |
+  | 10 | Ayuda y documentación | El bloque "¿Por qué este drone?" explica la decisión del sistema. |
 
 Reto 12 — TDD con Mockito: `AsignadorAutomatico`
 - [x] Pruebas antes que código, mocks de dependencias, casos edge
