@@ -8,6 +8,19 @@
 > mvn clean test
 > ```
 
+**Estructura del nivel** (una carpeta por ejercicio con código; cada ejercicio es autocontenido):
+```
+Prinplup/src/
+├── main/java/com/eci/aquaport/
+│   ├── ejercicio1/   → Reto 01: ConsultorFlota v2 (Streams)
+│   ├── ejercicio3/   → Reto 03: FabricaDrones, Strategy, Observer, AsignadorAutomatico
+│   └── ejercicio12/  → Reto 12: AsignadorAutomatico construido con TDD
+└── test/java/com/eci/aquaport/
+    ├── ejercicio1/   → ConsultorFlotaTest
+    ├── ejercicio3/   → AsignadorAutomaticoTest (Mockito), FabricaDronesTest, EstrategiaSeleccionTest, ObservadoresTest
+    └── ejercicio12/  → AsignadorAutomaticoTest (TDD + Mockito), ModeloDronesTest
+```
+
 Reto 1 — Streams & Lambdas: `ConsultorFlota` v2
 - [x] groupingBy, partitioningBy, averagingInt, distinct sobre la flota de 15 drones
 - Evidencia:
