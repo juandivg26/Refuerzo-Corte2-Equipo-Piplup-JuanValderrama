@@ -329,6 +329,11 @@ Reto 8 — Identidad y UX
   - **Miller:** cada tarjeta muestra solo 4 datos (ID, tipo, batería, estado), dentro del límite de 7 ± 2 elementos.
 
   Los prompts usados para generar la tarjeta y el flujo de 3 pantallas están en el reto 11.
+<img width="1500" height="573" alt="Screenshot 2026-10-09 182834" src="https://github.com/user-attachments/assets/a533a48b-b5ed-4857-a59c-94bf0a861c81" />
+<img width="1486" height="787" alt="Screenshot 2026-10-09 182850" src="https://github.com/user-attachments/assets/32d0e091-0db6-4d4f-b6da-7e14ed2b6e03" />
+<img width="1496" height="657" alt="Screenshot 2026-10-09 182916" src="https://github.com/user-attachments/assets/2e252691-f29d-4c11-9480-85065d06b49a" />
+<img width="1181" height="763" alt="Screenshot 2026-10-09 183212" src="https://github.com/user-attachments/assets/9cb96846-8e74-4b3a-938c-04ec03df98a5" />
+
 
 Reto 9 — Agilismo y Jira
 - [x] Sprint con Story Points y DoD
