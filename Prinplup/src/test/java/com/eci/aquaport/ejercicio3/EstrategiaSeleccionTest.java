@@ -42,4 +42,18 @@ class EstrategiaSeleccionTest {
 
         assertFalse(new ValidadorMision().esApto(ocupado, haciaLaguna));
     }
+
+    @Test
+    @DisplayName("ValidadorMision descarta drones con bateria menor a 35%")
+    void validadorDescartaBateriaBaja() {
+        assertFalse(new ValidadorMision().esApto(new DroneSuperficial("AR-03", 34, "Laguna Sur"), haciaLaguna));
+    }
+
+    @Test
+    @DisplayName("ValidadorMision descarta al buceador si la carga supera 300 g")
+    void validadorDescartaCargaExcesiva() {
+        Mision pesada = new Mision("M-302", "Laguna Sur", TipoCarga.EQUIPO_MEDICION, 301, Prioridad.NORMAL);
+
+        assertFalse(new ValidadorMision().esApto(new DroneBuceador("AR-11", 90, "Laguna Sur"), pesada));
+    }
 }
