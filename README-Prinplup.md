@@ -136,13 +136,169 @@ Reto 5 — Diagrama de Contexto C4 v2
 - [ ] Nuevo actor (Técnico de Mantenimiento) y 3 sistemas externos con flujos etiquetados
 - Evidencia:
 
+  **Fuente PlantUML** (se renderiza en https://www.plantuml.com/plantuml o con la extensión PlantUML de VS Code):
+  ```plantuml
+  @startuml
+  !include <C4/C4_Context>
+  title AquaPort v2 - Diagrama de Contexto (C4 nivel 1)
+
+  Person(solicitante, "Solicitante", "Pide el transporte de muestras, sensores o equipos")
+  Person(operador, "Operador Hidrico", "Supervisa la asignacion automatica")
+  Person(admin, "Administrador ECI", "Gestiona la flota y consulta reportes")
+  Person(tecnico, "Tecnico de Mantenimiento", "Atiende los drones en FALLO")
+
+  System(aquaport, "AquaPort v2", "Asigna automaticamente el drone acuatico mas adecuado a cada mision")
+
+  System_Ext(apiHidrica, "API Condiciones Hidricas", "Estado del agua por zona")
+  System_Ext(centro, "Centro de Control ECI", "Registra misiones y autoriza rutas")
+  System_Ext(alertas, "Sistema de Alertas", "Distribuye alertas de fallo")
+
+  Rel(solicitante, aquaport, "Solicitud de transporte (zona destino, tipo de carga, peso, prioridad)")
+  Rel(aquaport, solicitante, "Codigo de mision y drone asignado")
+  Rel(operador, aquaport, "Estrategia de seleccion activa, supervision")
+  Rel(aquaport, operador, "Estado de la flota y de las misiones")
+  Rel(admin, aquaport, "Altas/bajas de drones, consulta de reportes")
+  Rel(aquaport, apiHidrica, "Consulta de condiciones de la zona destino")
+  Rel(apiHidrica, aquaport, "Nivel de agitacion, profundidad, temperatura")
+  Rel(aquaport, centro, "Registro de mision y solicitud de autorizacion de ruta")
+  Rel(centro, aquaport, "Autorizacion de ruta acuatica")
+  Rel(aquaport, alertas, "Evento: drone en FALLO / mision CRITICA sin drone")
+  Rel(alertas, tecnico, "Notificacion del drone a revisar (id, tipo, zona)")
+  @enduml
+  ```
+
+  **Comparación MVP (Piplup) vs v2 (Prinplup):**
+  | Elemento | MVP | v2 | ¿Qué cambió? |
+  |---|---|---|---|
+  | Actores | Operador Hídrico, Solicitante, Administrador ECI | Los mismos + **Técnico de Mantenimiento** | Creció: aparece quien atiende los fallos. |
+  | Rol del operador | Asigna drones manualmente | Supervisa y elige la estrategia | Cambió: el sistema decide solo y el operador supervisa. |
+  | Sistemas externos | Ninguno | **API Condiciones Hídricas**, **Centro de Control ECI**, **Sistema de Alertas** | Creció: primera integración con sistemas reales. |
+  | Sistema central | AquaPort MVP como caja negra | AquaPort v2 como caja negra | Se mantuvo: el nivel 1 sigue sin mostrar clases. |
+  | Flujo con el solicitante | Solicitud → código de misión | Solicitud (con peso y prioridad) → código + drone asignado | Creció: la solicitud trae más datos. |
+
 Reto 6 — RF y RNF
-- [ ] 4 RF + 4 RNF + MoSCoW + tensión AP-07 vs AP-08
+- [x] 4 RF + 4 RNF + MoSCoW + tensión AP-07 vs AP-08
 - Evidencia:
 
+  **Requisitos Funcionales (nuevas funcionalidades de la v2):**
+  - **AP-07 Asignación automática:** cuando el Solicitante registra una solicitud de transporte, el sistema asigna automáticamente el drone disponible de mayor batería que sea apto (batería ≥ 35%, capacidad suficiente para el peso) y retorna el código de misión con el drone asignado.
+  - **AP-09 Alertas de fallo:** cuando un drone seleccionado está en estado `FALLO`, el sistema notifica al Centro de Control y al Técnico de Mantenimiento (id, tipo y zona del drone) y asigna un drone alternativo.
+  - **AP-10 Consulta de condiciones hídricas:** antes de asignar, el sistema consulta a la API de Condiciones Hídricas el nivel de agitación y la profundidad de la zona destino, y descarta los tipos de drone que no pueden operar en esas condiciones.
+  - **AP-11 Gestión por técnico:** el Técnico de Mantenimiento puede cambiar el estado de un drone (`FALLO` → `MANTENIMIENTO` → `DISPONIBLE`); el sistema refleja el nuevo estado en la flota y lo vuelve a considerar en la siguiente asignación.
+
+  **Requisitos No Funcionales:**
+  - **RNF-04 (Rendimiento):** el algoritmo de asignación automática debe seleccionar el drone en menos de **400 ms** con una flota de hasta **30 drones**, medido con JUnit 5 `assertTimeout`.
+  - **RNF-05 (Tiempo de alerta):** la notificación de un drone en `FALLO` debe llegar a todos los observadores registrados en menos de **1 s** desde que se detecta, medido en una prueba de integración.
+  - **RNF-06 (Calidad):** el build debe fallar si alguna clase de dominio baja del **80%** de líneas cubiertas o el proyecto del **70%** de ramas (quality gate de JaCoCo, reto 13).
+  - **RNF-07 (Disponibilidad):** si la API de Condiciones Hídricas no responde en **2 s**, el sistema usa las últimas condiciones conocidas de la zona (con máximo **15 min** de antigüedad) en lugar de bloquear la asignación.
+
+  **Clasificación MoSCoW:**
+  | Requisito | Categoría | Justificación |
+  |---|---|---|
+  | AP-07 Asignación automática | Must Have | Es la razón de ser de la v2: el sistema decide y el operador supervisa. |
+  | AP-09 Alertas de fallo | Must Have | Con 15 drones el operador no puede vigilar todos; un fallo sin aviso deja muestras perdidas. |
+  | AP-10 Condiciones hídricas | Should Have | Mejora la calidad de la asignación, pero la v2 puede operar con las reglas de batería y capacidad mientras se integra la API. |
+  | AP-11 Gestión por técnico | Could Have | Útil para cerrar el ciclo del fallo, pero el estado puede ajustarse manualmente desde administración. |
+  | RNF-04 Asignación < 400 ms | Must Have | La asignación es automática; si es lenta, las misiones CRÍTICAS esperan. |
+  | RNF-05 Alerta < 1 s | Should Have | Importa para reaccionar rápido, pero un segundo extra no rompe la operación. |
+  | RNF-06 Quality gate | Must Have | Es criterio del DoD de la v2: sin él no hay garantía sobre la lógica de asignación. |
+  | RNF-07 Respaldo de la API | Could Have | Solo aplica cuando AP-10 esté integrado. |
+
+  **Tensión entre AP-07 y AP-08:**
+  - **AP-07:** "El sistema asigna automáticamente el drone de mayor batería disponible para cualquier misión hídrica."
+  - **AP-08:** "Las misiones CRÍTICAS tienen prioridad absoluta: deben recibir el drone técnicamente más apto para la zona, independientemente de la batería."
+
+  No se contradicen, pero chocan en las misiones CRÍTICAS: AP-07 elige por **batería** y AP-08 por **aptitud para la zona**. Si el drone de 95% está en otra zona y uno de 60% ya está en la zona destino, AP-07 elige el primero y AP-08 el segundo.
+
+  **Resolución:** AP-08 prevalece sobre AP-07 **solo** para prioridad `CRITICA`; para `ALTA`, `NORMAL` y `BAJA` se aplica AP-07. En el diseño esto no requiere `if` dentro del asignador: el criterio vive en las estrategias del patrón Strategy (`MayorBateriaStrategy` para AP-07 y `ZonaCercanaStrategy` como base de AP-08), y la estrategia se elige según la prioridad de la misión. En ambos casos se mantiene el mínimo de 35% de batería, así que AP-08 nunca asigna un drone que no pueda terminar la misión.
+
 Reto 7 — Plantilla DOSW (RF AP-07)
-- [ ] Plantilla completa con sub-objetos
+- [x] Plantilla completa con sub-objetos
 - Evidencia:
+
+Proyecto: AquaPort v2 | DOSW 2026 | Página 1
+AQUAPORT V2
+Desarrollo y Operaciones de Software
+ANÁLISIS DE REQUERIMIENTOS
+
+# FUNCIONALIDAD
+
+Código: AP-07
+Nombre: Asignar automáticamente drone a misión hídrica
+Descripción: El sistema selecciona y asigna, sin intervención del operador, el drone acuático más adecuado para una solicitud de transporte según la zona destino, el tipo y peso de la carga, las condiciones del agua y la estrategia de selección activa.
+Cómo se ejecutará: Automáticamente, cada vez que el Solicitante registra una solicitud de transporte.
+Actor principal: Sistema AquaPort (disparado por el Solicitante); el Operador Hídrico supervisa.
+Precondiciones: Debe existir al menos un drone registrado en la flota. Debe haber una estrategia de selección activa configurada.
+
+# DATOS DE ENTRADA
+
+| Nombre | Descripción | Tipo de campo | Reglas / Aplicación | Obligatorio |
+|---|---|---|---|---|
+| carga | Lo que se transporta | — | — | Sí |
+| carga.peso | Peso de la carga | Integer | Entre 1 y 1500 gramos | Sí |
+| carga.tipo | Clase de carga | Enum(MUESTRA_AGUA, SENSOR, PAQUETE_LIGERO, EQUIPO_MEDICION) | — | Sí |
+| carga.prioridad | Urgencia de la misión | Enum(CRITICA, ALTA, NORMAL, BAJA) | CRITICA tiene precedencia absoluta (AP-08) | Sí |
+| zonaDestino | Zona de entrega | Enum(EMBALSE_NORTE, CANAL_CENTRAL, LAGUNA_SUR, RIBERA_ESTE, LAB_HIDRICO) | Debe ser una de las 5 zonas | Sí |
+
+# DATOS DE SALIDA
+
+| Nombre | Descripción | Tipo de campo | Reglas / Aplicación | Obligatorio |
+|---|---|---|---|---|
+| codigoMision | Identificador de la misión | String | Generado por el sistema, formato M-XXX | Sí |
+| droneAsignado | Drone elegido | — | Calculado por el sistema según la estrategia activa | No (salida) |
+| droneAsignado.id | Identificador del drone | String | Formato AR-XX | No (salida) |
+| droneAsignado.tipo | Tipo de drone | String | SUPERFICIAL / SEMISUMERGIDO / BUCEADOR | No (salida) |
+| droneAsignado.bateria | Batería al asignar | Integer | Entre 35 y 100 | No (salida) |
+| droneAsignado.estado | Estado tras la asignación | Enum(DISPONIBLE, EN_MISION, RECARGANDO, MANTENIMIENTO, SUMERGIDO, FALLO) | Queda en EN_MISION | No (salida) |
+
+# FLUJO BÁSICO
+
+| Paso | Actor | Descripción | Excepciones |
+|---|---|---|---|
+| 1 | Solicitante | Registra la solicitud con carga (peso, tipo, prioridad) y zona destino. | — |
+| 2 | Sistema | Consulta a la API de Condiciones Hídricas la agitación y profundidad de la zona destino. | FA-02 |
+| 3 | Sistema | Filtra los drones aptos para la zona: tipo compatible con las condiciones, estado no ocupado. | FA-01 |
+| 4 | Sistema | Aplica la estrategia de selección activa sobre los drones aptos. | FA-01 |
+| 5 | Sistema | Valida el drone elegido: batería ≥ 35%, capacidad de carga del tipo y que no esté en FALLO. | FA-03, FA-04 |
+| 6 | Sistema | Asigna el drone, lo cambia a EN_MISION y genera el código de misión. | — |
+| 7 | Sistema | Notifica a los observadores (Centro de Control) y retorna el código y el drone al Solicitante. | — |
+
+# FLUJO ALTERNO
+
+| Paso | Actor | Descripción | Excepciones |
+|---|---|---|---|
+| FA-01 | Sistema | Sin drones disponibles: no queda ningún drone apto. Si la misión es CRÍTICA, alerta al Centro de Control: "Misión CRÍTICA [id] sin drone disponible". La solicitud queda PENDIENTE. | Fin del caso |
+| FA-02 | Sistema | Condiciones hídricas adversas: la zona supera el nivel de agitación permitido. Solo se consideran drones SEMISUMERGIDO; si no hay, se aplica FA-01. | Continúa en paso 3 |
+| FA-03 | Sistema | La carga supera la capacidad del tipo (ej. 400 g para un BUCEADOR de 300 g): se descarta ese drone y se vuelve a aplicar la estrategia. | Retorna al paso 4 |
+| FA-04 | Sistema | El drone elegido está en FALLO: se notifica al Centro de Control y al Técnico de Mantenimiento, se descarta y se busca un alternativo. | Retorna al paso 4 |
+
+Proyecto: AquaPort v2 | DOSW 2026 | Página 2
+
+**Notas y comentarios:**
+Implementado en `AsignadorAutomatico`, `ValidadorMision`, `EstrategiaSeleccion` y `ObservadorMision` (`Prinplup/src/main/java/com/eci/aquaport/ejercicio3/` y `ejercicio12/`).
+
+# REGLAS DE NEGOCIO
+
+| No. | Descripción |
+|---|---|
+| RN-01 | Ningún drone con batería menor a 35% puede ser asignado. |
+| RN-02 | El DroneBuceador no se asigna para cargas mayores a 300 g (Superficial: hasta 500 g; Semisumergido: hasta 1500 g). |
+| RN-03 | Las misiones CRÍTICAS reciben el drone técnicamente más apto para la zona, aunque no sea el de mayor batería (AP-08). |
+| RN-04 | Un drone EN_MISION, RECARGANDO, MANTENIMIENTO o SUMERGIDO no puede recibir otra misión. |
+
+# ABREVIATURAS
+
+| Abreviatura | Significado |
+|---|---|
+| RF | Requisito Funcional |
+| RN | Regla de Negocio |
+| FA | Flujo Alterno |
+
+# HISTORIAL DE REVISIÓN
+
+| Elaborado por | Aprobado por | Fecha | Descripción y Justificación de Cambios |
+|---|---|---|---|
+| Equipo Piplup | | 09/10/2026 | Versión inicial del documento para la v2. |
 
 Reto 8 — Identidad y UX
 - [ ] Tarjeta de drone con 6 estados, flujo de 3 pantallas, Fitts y Hick
@@ -155,6 +311,55 @@ Reto 9 — Agilismo y Jira
 Reto 10 — Diagrama de Casos de Uso v2
 - [ ] Nuevo actor, include y extend
 - Evidencia:
+
+  **Fuente PlantUML:**
+  ```plantuml
+  @startuml
+  left to right direction
+  skinparam packageStyle rectangle
+
+  actor "Usuario ECI" as base
+  actor "Operador Hidrico" as operador
+  actor "Administrador ECI" as admin
+  actor "Solicitante" as solicitante
+  actor "Tecnico de Mantenimiento" as tecnico
+  actor "Centro de Control" as centro <<sistema>>
+
+  operador --|> base
+  admin --|> base
+
+  rectangle "AquaPort v2" {
+    usecase "Solicitar transporte" as UC1
+    usecase "Asignar mision automaticamente" as UC2
+    usecase "Validar condiciones hidricas" as UC3
+    usecase "Notificar fallo al tecnico" as UC4
+    usecase "Consultar estado de la flota" as UC5
+    usecase "Cambiar estrategia de seleccion" as UC6
+    usecase "Gestionar drones de la flota" as UC7
+    usecase "Atender drone en FALLO" as UC8
+  }
+
+  solicitante --> UC1
+  UC1 ..> UC2 : <<include>>
+  UC2 ..> UC3 : <<include>>
+  UC4 ..> UC2 : <<extend>>
+  note right of UC4
+    Condicion: hay un drone en
+    estado FALLO durante la asignacion
+  end note
+  UC2 --> centro
+  base --> UC5
+  operador --> UC6
+  admin --> UC7
+  tecnico --> UC8
+  UC4 --> tecnico
+  @enduml
+  ```
+
+  **Decisiones del diagrama:**
+  - `<<include>>` "Validar condiciones hídricas": siempre ocurre; sin validar el agua no se puede asignar.
+  - `<<extend>>` "Notificar fallo al técnico": solo ocurre si aparece un drone en `FALLO` durante la asignación.
+  - Generalización: Operador Hídrico y Administrador ECI heredan del actor base "Usuario ECI" el CU "Consultar estado de la flota"; cada uno conserva sus CU propios.
 
 Reto 11 — Mocks con IA
 - [ ] 3 pantallas + alerta, 4 prompts
