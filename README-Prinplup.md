@@ -50,6 +50,7 @@ Reto 1 — Streams & Lambdas: `ConsultorFlota` v2
   4) Misiones criticas (true) vs demas (false): {false=[M-202, M-203, M-205], true=[M-201, M-204]}
   5) Zonas cubiertas por la flota activa: [Canal Central, Embalse Norte, Laboratorio Hídrico, Laguna Sur, Punto Ribereño Este]
   ```
+<img width="784" height="485" alt="imagen" src="https://github.com/user-attachments/assets/6196105a-b0e6-4916-a9bc-017339062b2d" />
 
 Reto 2 — GitHub y GitFlow (release y tag)
 - [x] Features con PR a Develop, release/v2.0, merge a main con tag v2.0.0
@@ -86,6 +87,7 @@ Reto 2 — GitHub y GitFlow (release y tag)
                │      └─ feature/factory-drones
                └─ feature/streams-flota-v2
   ```
+<img width="895" height="424" alt="imagen" src="https://github.com/user-attachments/assets/ee876807-54d1-4a3e-ab60-9187814897db" />
 
 Reto 3 — Patrones de Diseño: Strategy + Observer + Factory Method
 - [x] FabricaDrones, AsignadorAutomatico con Strategy y alertas por Observer; prueba con Mockito
@@ -119,6 +121,7 @@ Reto 3 — Patrones de Diseño: Strategy + Observer + Factory Method
   [CENTRO DE CONTROL] ALERTA: mision CRITICA M-303 sin drone disponible
   M-303 -> sin drone
   ```
+<img width="959" height="497" alt="imagen" src="https://github.com/user-attachments/assets/93f24a71-5e3b-4a9d-af63-540018f4605a" />
 
 Reto 4 — Principios SOLID
 - [x] Auditoría de las clases de la v2
@@ -131,41 +134,14 @@ Reto 4 — Principios SOLID
   | **L** — Sustitución de Liskov | Las 3 subclases cumplen el contrato de `DroneAcuatico`: ninguna lanza excepciones ni retorna `null`; solo cambian tipo y capacidad. `ModeloDronesTest` recorre las 3 como `DroneAcuatico`. | El asignador trata a cualquier drone igual, sin preguntar qué tipo es. |
   | **I** — Segregación de interfaces | `ObservadorMision` tiene un solo método obligatorio (`notificarFalloDrone`); `notificarFalloAsignacion` es `default`, así el técnico no implementa una alerta que no le corresponde. `EstrategiaSeleccion` tiene un solo método. | Cada observador implementa solo lo que atiende. |
   | **D** — Inversión de dependencias | `AsignadorAutomatico` recibe `EstrategiaSeleccion` y `ValidadorMision` por constructor y conoce a los observadores solo por la interfaz. Los concretos se crean en `Main`. | Permite inyectar mocks en las pruebas (reto 12) y cambiar la estrategia sin tocar el asignador. |
+<img width="845" height="542" alt="imagen" src="https://github.com/user-attachments/assets/4020c1c4-961f-44ee-be52-f0536ae27af2" />
 
 Reto 5 — Diagrama de Contexto C4 v2
-- [ ] Nuevo actor (Técnico de Mantenimiento) y 3 sistemas externos con flujos etiquetados
+- [x] Nuevo actor (Técnico de Mantenimiento) y 3 sistemas externos con flujos etiquetados
 - Evidencia:
 
-  **Fuente PlantUML** (se renderiza en https://www.plantuml.com/plantuml o con la extensión PlantUML de VS Code):
-  ```plantuml
-  @startuml
-  !include <C4/C4_Context>
-  title AquaPort v2 - Diagrama de Contexto (C4 nivel 1)
+ <img width="1579" height="996" alt="imagen" src="https://github.com/user-attachments/assets/56907216-1795-460c-8f2b-687bdc5ea590" />
 
-  Person(solicitante, "Solicitante", "Pide el transporte de muestras, sensores o equipos")
-  Person(operador, "Operador Hidrico", "Supervisa la asignacion automatica")
-  Person(admin, "Administrador ECI", "Gestiona la flota y consulta reportes")
-  Person(tecnico, "Tecnico de Mantenimiento", "Atiende los drones en FALLO")
-
-  System(aquaport, "AquaPort v2", "Asigna automaticamente el drone acuatico mas adecuado a cada mision")
-
-  System_Ext(apiHidrica, "API Condiciones Hidricas", "Estado del agua por zona")
-  System_Ext(centro, "Centro de Control ECI", "Registra misiones y autoriza rutas")
-  System_Ext(alertas, "Sistema de Alertas", "Distribuye alertas de fallo")
-
-  Rel(solicitante, aquaport, "Solicitud de transporte (zona destino, tipo de carga, peso, prioridad)")
-  Rel(aquaport, solicitante, "Codigo de mision y drone asignado")
-  Rel(operador, aquaport, "Estrategia de seleccion activa, supervision")
-  Rel(aquaport, operador, "Estado de la flota y de las misiones")
-  Rel(admin, aquaport, "Altas/bajas de drones, consulta de reportes")
-  Rel(aquaport, apiHidrica, "Consulta de condiciones de la zona destino")
-  Rel(apiHidrica, aquaport, "Nivel de agitacion, profundidad, temperatura")
-  Rel(aquaport, centro, "Registro de mision y solicitud de autorizacion de ruta")
-  Rel(centro, aquaport, "Autorizacion de ruta acuatica")
-  Rel(aquaport, alertas, "Evento: drone en FALLO / mision CRITICA sin drone")
-  Rel(alertas, tecnico, "Notificacion del drone a revisar (id, tipo, zona)")
-  @enduml
-  ```
 
   **Comparación MVP (Piplup) vs v2 (Prinplup):**
   | Elemento | MVP | v2 | ¿Qué cambió? |
@@ -175,6 +151,7 @@ Reto 5 — Diagrama de Contexto C4 v2
   | Sistemas externos | Ninguno | **API Condiciones Hídricas**, **Centro de Control ECI**, **Sistema de Alertas** | Creció: primera integración con sistemas reales. |
   | Sistema central | AquaPort MVP como caja negra | AquaPort v2 como caja negra | Se mantuvo: el nivel 1 sigue sin mostrar clases. |
   | Flujo con el solicitante | Solicitud → código de misión | Solicitud (con peso y prioridad) → código + drone asignado | Creció: la solicitud trae más datos. |
+<img width="845" height="515" alt="imagen" src="https://github.com/user-attachments/assets/28b44108-8c84-405c-ba43-0e8e37ed4b93" />
 
 Reto 6 — RF y RNF
 - [x] 4 RF + 4 RNF + MoSCoW + tensión AP-07 vs AP-08
