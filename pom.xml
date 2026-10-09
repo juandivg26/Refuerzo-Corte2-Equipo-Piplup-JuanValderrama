@@ -23,16 +23,22 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>5.11.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <!--
-        NIVEL ACTIVO: Piplup.
-        Cuando empieces Prinplup, cambia las 2 rutas de abajo (sourceDirectory
-        y testSourceDirectory) de "Piplup" a "Prinplup". Y luego a "Empoleon".
+        NIVEL ACTIVO: Prinplup.
+        Para volver a compilar otro nivel, cambia las 2 rutas de abajo (sourceDirectory
+        y testSourceDirectory) a "Piplup" o "Empoleon".
     -->
     <build>
-        <sourceDirectory>${project.basedir}/Piplup/src/main/java</sourceDirectory>
-        <testSourceDirectory>${project.basedir}/Piplup/src/test/java</testSourceDirectory>
+        <sourceDirectory>${project.basedir}/Prinplup/src/main/java</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/Prinplup/src/test/java</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
