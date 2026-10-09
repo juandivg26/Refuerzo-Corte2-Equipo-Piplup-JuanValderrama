@@ -211,16 +211,18 @@ Precondiciones: Debe existir al menos un drone disponible con bateria >= 35%. El
 |---|---|---|---|
 | 1 | Operador Hidrico | Selecciona un drone disponible de la flota. | — |
 | 2 | Operador Hidrico | Ingresa el punto de partida, el punto de llegada y el tipo de carga. | — |
-| 3 | Sistema | Valida que el drone no tenga ya una mision activa (PENDIENTE o EN_TRANSITO). | FA-01 |
-| 4 | Sistema | Construye la mision con estado PENDIENTE y le asigna un codigo unico. | FA-02 |
+| 3 | Sistema | Valida que el drone tenga bateria >= 35%, que la zona de destino sea una de las 5 zonas fijas del campus y que el drone no tenga ya una mision activa (PENDIENTE o EN_TRANSITO). | FA-01, FA-02, FA-03 |
+| 4 | Sistema | Construye la mision con estado PENDIENTE y le asigna un codigo unico. | FA-04 |
 | 5 | Sistema | Confirma el registro y retorna el codigo de mision generado al operador. | — |
 
 # FLUJO ALTERNO
 
 | Paso | Actor | Descripción | Excepciones |
 |---|---|---|---|
-| FA-01 | Sistema | Si el drone seleccionado ya tiene una mision activa, el sistema rechaza la asignacion y muestra: "El drone [id] ya tiene una mision activa." | Retorna al paso 1 |
-| FA-02 | Sistema | Si puntoLlegada esta vacio o es igual a puntoPartida, el sistema rechaza la mision y muestra: "El punto de llegada es obligatorio y no puede ser igual al punto de partida." | Retorna al paso 2 |
+| FA-01 | Sistema | Drone sin bateria suficiente: si la bateria del drone es menor a 35%, el sistema rechaza la asignacion y muestra: "El drone [id] tiene bateria insuficiente ([bateria]%). Minimo requerido: 35%." | Retorna al paso 1 |
+| FA-02 | Sistema | Zona de destino invalida: si puntoLlegada no es una de las zonas fijas (Embalse Norte, Canal Central, Laguna Sur, Punto Ribereño Este, Laboratorio Hídrico), el sistema rechaza la mision y muestra: "La zona [puntoLlegada] no es una de las zonas fijas del campus." | Retorna al paso 2 |
+| FA-03 | Sistema | Si el drone seleccionado ya tiene una mision activa, el sistema rechaza la asignacion y muestra: "El drone [id] ya tiene una mision activa." | Retorna al paso 1 |
+| FA-04 | Sistema | Si puntoLlegada esta vacio o es igual a puntoPartida, el sistema rechaza la mision y muestra: "El punto de llegada es obligatorio y no puede ser igual al punto de partida." | Retorna al paso 2 |
 
 Proyecto: AquaPort MVP | DOSW 2026 | Página 2
 
@@ -236,6 +238,7 @@ Esta funcionalidad corresponde al modelo `Mision.Builder` (reto 03) y a `Validad
 |---|---|
 | RN-01 | Un drone no puede tener mas de 1 mision activa simultanea. |
 | RN-02 | Solo se pueden asignar drones con disponible == true y bateria >= 35%. |
+| RN-03 | El punto de llegada debe ser una de las 5 zonas fijas del MVP. |
 
 # ABREVIATURAS
 
@@ -266,7 +269,16 @@ Reto 8 — Manual de Identidad y UX/UI
   - Ámbar `#F0A830` — advertencia (batería baja, misión pendiente)
   - Rojo coral `#E25C5C` — error/no disponible
 
-  **Tipografía:** Inter (bold/semibold para encabezados, regular para cuerpo)
+  **Colores de estado del drone:**
+  | Estado | Color | HEX |
+  |---|---|---|
+  | Disponible | Verde menta | `#4CD9B0` |
+  | En misión | Azul | `#2F80ED` |
+  | Recargando | Ámbar | `#F0A830` |
+  | Mantenimiento | Gris | `#8A94A6` |
+  | Fallo | Rojo coral | `#E25C5C` |
+
+  **Tipografía:** Inter (bold/semibold para encabezados, regular para cuerpo). Monoespaciada **JetBrains Mono** para IDs de drones (`AR-01`) y códigos de misión (`M-101`).
 
   **Logo (concepto):** ícono de gota de agua combinado con hélice de dron, en azul profundo, acompañando el nombre "AquaPort" en Inter bold.
 
@@ -276,7 +288,15 @@ Reto 8 — Manual de Identidad y UX/UI
   <img width="1866" height="882" alt="imagen" src="https://github.com/user-attachments/assets/9af67555-cdad-4658-86ae-c44ed94e6cf9" />
 
 
-  [captura del mock]
+  **Heurísticas de Nielsen que cumple el mock:**
+  | # | Heurística | Cómo se cumple en el panel |
+  |---|---|---|
+  | 1 | Visibilidad del estado del sistema | Cada drone muestra su estado con color y etiqueta, y su batería en %, sin clics adicionales. |
+  | 2 | Coincidencia con el mundo real | Se usan los nombres reales de las zonas (Embalse Norte, Laguna Sur…) y términos del operador (misión, carga, batería). |
+  | 4 | Consistencia y estándares | Los mismos colores de estado y la misma tarjeta se repiten para los 4 drones. |
+  | 6 | Reconocer antes que recordar | ID, zona, batería y estado están visibles en la tarjeta; el operador no necesita recordarlos. |
+  | 8 | Diseño estético y minimalista | El panel solo muestra lo necesario para decidir: ID, batería, estado y zona. |
+
 <img width="922" height="375" alt="imagen" src="https://github.com/user-attachments/assets/f455d7f8-9686-4d67-909e-39f3a3f3aa48" />
 
 Reto 9 — Agilismo y Jira
@@ -326,6 +346,7 @@ Reto 12 — TDD: `ValidadorMision`
   1. **Red:** se copió el modelo base (`DroneAcuatico`, `Mision`, `EstadoMision`, `TipoCarga`) desde `ejercicio4` al paquete `ejercicio12`, y se escribió `ValidadorMisionTest.java` con 8 pruebas que referencian métodos que aún no existían en `ValidadorMision` (`tieneBateriaSuficiente`, `validarPuntoLlegada`, `validarDroneDisponible`, `validarZona`) — el proyecto no compilaba, confirmando el estado Red.
   2. **Green:** se implementó cada método con la lógica mínima necesaria para que su prueba correspondiente pasara.
   3. **Refactor:** se integraron todas las reglas dentro del método `validar(Mision, List<Mision>)`, que ahora valida disponibilidad del drone, punto de llegada, zona y batería suficiente, además de la regla ya existente de "drone sin misión activa" (heredada de `ejercicio4`). Las 8 pruebas se mantuvieron pasando durante el refactor, confirmando que no se rompió el comportamiento.
+  4. **Segundo ciclo (zona inválida como caso edge):** **Red** — se agregaron 7 pruebas (zona fuera de las 5 zonas fijas, zona fija válida, drone nulo, misión nula, zona de destino inválida dentro de `validar`, drone sin batería dentro de `validar`, drone con misión `ENTREGADA` que sí puede reasignarse); 2 fallaron porque `validarZona` solo revisaba nulo/vacío. **Green** — `validarZona` ahora valida contra el conjunto `ZONAS_VALIDAS` y `validar` revisa la zona del punto de llegada. Total: 15 pruebas en verde. El commit de pruebas (`test: ... (Red)`) es anterior al de código (`feat: ... (Green)`).
 
 <img width="881" height="402" alt="imagen" src="https://github.com/user-attachments/assets/41afcb3b-8a9c-41df-aa35-44c396b3e18c" />
 
@@ -338,16 +359,17 @@ Reto 13 — JaCoCo
 
   **Paso a paso:**
   1. El plugin `jacoco-maven-plugin` ya estaba configurado en el `pom.xml` (goals `prepare-agent` y `report`, atados a la fase `test`).
-  2. Se corrió `mvn clean test`, lo que ejecuta las 9 pruebas de `ValidadorMisionTest` y genera automáticamente el reporte HTML en `target/site/jacoco/index.html`.
+  2. Se corrió `mvn clean test`, lo que ejecuta las 15 pruebas de `ValidadorMisionTest` y genera automáticamente el reporte HTML en `target/site/jacoco/index.html`.
   3. Se abrió el reporte y se navegó hasta el paquete `com.eci.aquaport.ejercicio12` → clase `ValidadorMision`.
 
   **Resultado obtenido:**
-  | Métrica | Cobertura |
-  |---|---|
-  | Instrucciones (líneas) | **84%** |
-  | Ramas (branches) | 70% |
+  | Métrica | Primer ciclo (8 pruebas) | Segundo ciclo (15 pruebas) |
+  |---|---|---|
+  | Líneas | 92% | **100%** |
+  | Instrucciones | 84% | **100%** |
+  | Ramas (branches) | 70% | **91%** |
 
-  La cobertura de instrucciones/líneas de `ValidadorMision` es del **84%**, superando el mínimo de 80% exigido por el reto. Esto se logró con 9 pruebas unitarias (ver reto 12) que cubren: batería suficiente/insuficiente, punto de llegada nulo/vacío, drone no disponible, zona inválida, misión nula, caso feliz completo, y drone con misión activa.
+  La cobertura de líneas de `ValidadorMision` es del **100%**, superando el mínimo de 80% exigido por el reto. Las 15 pruebas (ver reto 12) cubren: batería suficiente/insuficiente, punto de llegada nulo/vacío, drone nulo/no disponible, zona vacía/no registrada/válida, misión nula, zona de destino inválida, drone sin batería, caso feliz, drone con misión activa y drone con misión entregada.
 
  
 <img width="882" height="561" alt="imagen" src="https://github.com/user-attachments/assets/6cfed7cf-ddfb-4581-ac79-fb6e13617638" />
