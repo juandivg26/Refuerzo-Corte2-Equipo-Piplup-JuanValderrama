@@ -5,26 +5,38 @@ Generado automaticamente con `scripts/generar-changelog.sh` a partir de los comm
 ## Sin publicar
 
 ### Funcionalidades
+- PlanificadorRuta y EjecutorRuta con reasignacion, cadena de custodia y notificacion de waypoints (Green)
+- cadena de validacion, decorator de telemetria y adapter de la API hidrica por capas (Empoleon reto 03)
 - streams de la red multi-embalse con eficiencia por zona, ruta multi-etapa y Collector propio (Empoleon reto 01)
 
 ### Refactorizaciones
+- dividir los Main de Empoleon en metodos de maximo 15 lineas (estandar Enterprise)
 - reemplazar System.out por Logger y canal inyectado en observadores (java:S106)
 - constantes para los nombres de zona en el Main de ejercicio1 (java:S1192)
 - reescribir comentario de ObservadorMision que Sonar leia como TODO (java:S1135)
 
 ### Pruebas
+- auditoria de arquitectura por capas con ArchUnit (direccion de dependencias, dominio puro, inyeccion por constructor) (Empoleon reto 14)
+- pruebas TDD del planificador y ejecutor de rutas multi-etapa con los 5 flujos alternos e integracion de capas (Red)
+- Mockito verifica que la cadena se detiene en el primer fallo, que el decorator no altera el drone y que el adapter convierte valores limite
 - pruebas del AnalizadorRedHidrica y del Collector en stream paralelo
 
 ### Documentacion
+- README de Empoleon con estructura por capas y evidencia de los retos 01, 02 y 03
+- CHANGELOG generado desde los commits
 - resultado final de SonarQube en Prinplup (reto 14 completo)
 - issues de SonarQube resueltos y justificacion de exclusiones (Prinplup reto 14)
 - sprint v2 en Jira con Story Points y DoD, sistema de diseño con Fitts/Hick y prompts de mocks (Prinplup retos 08, 09, 11)
 - RF/RNF con MoSCoW y tension AP-07/AP-08, plantilla DOSW AP-07 y fuentes PlantUML de C4 y CU (Prinplup retos 05, 06, 07, 10)
 
 ### Build
+- quality gate Enterprise de JaCoCo (85% lineas y 75% ramas del proyecto, 80% por clase) con pruebas de las ramas pendientes (Empoleon reto 13)
 - hook commit-msg que valida Conventional Commits y script que genera el CHANGELOG (Empoleon reto 02)
 - activar el nivel Empoleon en el pom (version 3.0.0-SNAPSHOT)
 - excluir copias de ejercicio12 del calculo de duplicacion y los Main de la cobertura en Sonar
+
+### Mantenimiento
+- copiar el modelo por capas de ejercicio3 a ejercicio12 (TDD de rutas multi-etapa)
 
 ## v2.0.0
 
