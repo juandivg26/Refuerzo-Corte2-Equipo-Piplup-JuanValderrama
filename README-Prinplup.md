@@ -523,9 +523,12 @@ Reto 14 — SonarQube
   **Resultado final (Overall Code, versión 2.0.0, 653 líneas):**
   | Indicador | Meta del reto | Resultado |
   |---|---|---|
-  | Bugs (Reliability) | 0 | **0** ✅ |
-  | Vulnerabilidades (Security) | 0 | **0** ✅ |
-  | Deuda técnica (Maintainability) | < 30 min | **0 issues, 0 min** ✅ |
-  | Duplicación | < 5% | **0.0%** ✅ |
+  | Bugs (Reliability) | 0 | **0**  |
+  | Vulnerabilidades (Security) | 0 | **0**  |
+  | Deuda técnica (Maintainability) | < 30 min | **0 issues, 0 min**  |
+  | Duplicación | < 5% | **0.0%**  |
   | Cobertura | — | **98.8%** |
-  | Quality Gate | Passed | **Passed** ✅ |
+  | Quality Gate | Passed | **Passed**  |
+  <img width="1690" height="599" alt="imagen" src="https://github.com/user-attachments/assets/b77824ff-0384-4167-b964-9d95fe4ba25e" />
+  <img width="862" height="477" alt="imagen" src="https://github.com/user-attachments/assets/e37b8640-bd59-4187-93ba-1bf0d92ba10d" />
+
