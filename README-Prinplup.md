@@ -504,7 +504,7 @@ Reto 13 — JaCoCo con Quality Gate
 <img width="870" height="499" alt="imagen" src="https://github.com/user-attachments/assets/44f18f40-dbdb-4c49-862b-ec2ab1b784a6" />
 
 Reto 14 — SonarQube
-- [ ] 0 bugs, 0 vulnerabilidades, deuda < 30 min, duplicación < 5%
+- [x] 0 bugs, 0 vulnerabilidades, deuda < 30 min, duplicación < 5%
 - Evidencia:
 
   **Primer análisis (v2.0.0):** 0 bugs, 0 vulnerabilidades, 17 code smells (160 min de deuda), cobertura 80.4% y duplicación 16.3%. Quality Gate en verde, pero la deuda y la duplicación estaban por encima de lo que pide el reto.
@@ -519,3 +519,13 @@ Reto 14 — SonarQube
   **Duplicación:** `ejercicio12` copia a propósito el modelo de `ejercicio3`, porque cada ejercicio es autocontenido (reto 12: TDD desde cero sobre el mismo dominio). Esa copia es una decisión de organización del repositorio, no código duplicado dentro del sistema, así que se excluyó del cálculo con `sonar.cpd.exclusions=**/ejercicio12/**` en el `pom.xml`. El código de `ejercicio12` **sí** se sigue analizando para bugs, vulnerabilidades y code smells; solo se excluye de la métrica de duplicación.
 
   **Cobertura:** se excluyeron los `Main` (`sonar.coverage.exclusions=**/Main.java`) con el mismo criterio del quality gate de JaCoCo (reto 13): solo imprimen la demo de cada reto.
+
+  **Resultado final (Overall Code, versión 2.0.0, 653 líneas):**
+  | Indicador | Meta del reto | Resultado |
+  |---|---|---|
+  | Bugs (Reliability) | 0 | **0** ✅ |
+  | Vulnerabilidades (Security) | 0 | **0** ✅ |
+  | Deuda técnica (Maintainability) | < 30 min | **0 issues, 0 min** ✅ |
+  | Duplicación | < 5% | **0.0%** ✅ |
+  | Cobertura | — | **98.8%** |
+  | Quality Gate | Passed | **Passed** ✅ |
