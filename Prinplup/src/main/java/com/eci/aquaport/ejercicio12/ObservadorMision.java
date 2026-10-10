@@ -4,7 +4,7 @@ public interface ObservadorMision {
 
     void notificarFalloDrone(DroneAcuatico drone, Mision mision);
 
-    /** Mision CRITICA que se quedo sin drone. Por defecto no hace nada: no todo observador la atiende. */
+    /** Mision CRITICA que se quedo sin drone. Por defecto se ignora: solo algunos observadores la atienden. */
     default void notificarFalloAsignacion(Mision mision) {
     }
 }

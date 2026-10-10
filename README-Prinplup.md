@@ -278,60 +278,82 @@ Implementado en `AsignadorAutomatico`, `ValidadorMision`, `EstrategiaSeleccion` 
 | Equipo Piplup | | 09/10/2026 | Versión inicial del documento para la v2. |
 
 Reto 8 — Identidad y UX
-- [ ] Tarjeta de drone con 6 estados, flujo de 3 pantallas, Fitts y Hick
+- [x] Tarjeta de drone con 6 estados, flujo de 3 pantallas, Fitts y Hick
 - Evidencia:
+
+  **Sistema de diseño v2** (extiende el manual de identidad de Piplup, reto 08):
+  | Token | Valor |
+  |---|---|
+  | Primario | Azul profundo `#0B3C5D` |
+  | Acento | Celeste `#1D9A9F` |
+  | Disponible | Verde menta `#4CD9B0` |
+  | En misión | Azul `#2F80ED` |
+  | Recargando | Ámbar `#F0A830` |
+  | Mantenimiento | Gris `#8A94A6` |
+  | Fallo | Rojo coral `#E25C5C` |
+  | Sumergido (nuevo en v2) | Azul oscuro `#1B2A6B` |
+  | Tipografía | Inter (interfaz) + JetBrains Mono (IDs `AR-XX`, códigos `M-XXX`) |
+
+  | Componente | Estados |
+  |---|---|
+  | Tarjeta de drone acuático | Disponible, En misión, Recargando, Mantenimiento, Fallo, Sumergido |
+  | Botón "Asignar misión" | Default, hover, procesando (spinner), éxito, deshabilitado |
+  | Indicador de batería | ≥ 60% verde, 35-59% ámbar, < 35% rojo con ícono de advertencia |
+
+  **Leyes UX aplicadas:**
+  - **Fitts:** el botón de emergencia "Detener misión" es el más grande de la pantalla (mínimo 48 px de alto), en rojo y anclado en la esquina inferior derecha, la zona más fácil de alcanzar. Los botones destructivos quedan lejos de "Asignar" para evitar clics por error.
+  - **Hick:** los 15 drones no se muestran como una sola lista; se agrupan en 3 columnas por tipo (Superficial, Semisumergido, Buceador) con 5 tarjetas cada una. El operador primero elige entre 3 grupos y luego entre 5 drones, en vez de decidir entre 15 opciones a la vez.
+  - **Miller:** cada tarjeta muestra solo 4 datos (ID, tipo, batería, estado), dentro del límite de 7 ± 2 elementos.
+
+  Los prompts usados para generar la tarjeta y el flujo de 3 pantallas están en el reto 11.
+<img width="1500" height="573" alt="Screenshot 2026-10-09 182834" src="https://github.com/user-attachments/assets/a533a48b-b5ed-4857-a59c-94bf0a861c81" />
+<img width="1486" height="787" alt="Screenshot 2026-10-09 182850" src="https://github.com/user-attachments/assets/32d0e091-0db6-4d4f-b6da-7e14ed2b6e03" />
+<img width="1496" height="657" alt="Screenshot 2026-10-09 182916" src="https://github.com/user-attachments/assets/2e252691-f29d-4c11-9480-85065d06b49a" />
+<img width="1181" height="763" alt="Screenshot 2026-10-09 183212" src="https://github.com/user-attachments/assets/9cb96846-8e74-4b3a-938c-04ec03df98a5" />
+
+<img width="908" height="546" alt="imagen" src="https://github.com/user-attachments/assets/fb9f81a4-dac4-46b6-94c2-1844452ba647" />
 
 Reto 9 — Agilismo y Jira
-- [ ] Sprint con Story Points y DoD
+- [x] Sprint con Story Points y DoD
 - Evidencia:
+
+  **Link de Jira:** https://mail-team-nyjtgqcj.atlassian.net/jira/software/projects/AQ/boards/71
+
+  **Jerarquía de la v2:**
+  - **Épica AQ-18:** AquaPort v2 — Flota autónoma con asignación automática y alertas.
+  - **Feature AQ-19:** Asignación automática de drones por zona.
+  - **Feature AQ-20:** Alertas al centro de control.
+
+  **Sprint activo:** `AQ Sprint v2 — Prinplup` (09/10/2026 – 23/10/2026)
+  **Sprint Goal:** "Completar el asignador automático con Strategy y las alertas con Observer"
+
+  | HU | Historia de usuario | Feature | Story Points |
+  |---|---|---|---|
+  | AQ-21 | Como administrador ECI, quiero registrar drones de los 3 tipos con su capacidad de carga, para que el sistema sepa qué carga puede llevar cada uno. | AQ-19 | 3 |
+  | AQ-22 | Como operador hídrico, quiero que el sistema asigne automáticamente el drone más adecuado según zona, carga y batería, para no tener que elegirlo manualmente entre 15 drones. | AQ-19 | 8 |
+  | AQ-23 | Como operador hídrico, quiero elegir la estrategia de selección, para adaptar la asignación a la operación del día sin modificar el asignador. | AQ-19 | 5 |
+  | AQ-24 | Como solicitante, quiero que mis misiones CRÍTICAS tengan prioridad absoluta, para que las muestras urgentes no esperen. | AQ-19 | 5 |
+  | AQ-25 | Como centro de control, quiero recibir una alerta cuando un drone entra en FALLO, para saberlo de inmediato y que la misión no se pierda. | AQ-20 | 5 |
+  | AQ-26 | Como técnico de mantenimiento, quiero ser notificado del drone en FALLO con su tipo y zona, para ir a revisarlo sin consultar el panel. | AQ-20 | 2 |
+  | | | **Total** | **28** |
+
+  **Estimación (Fibonacci):** AQ-22 vale 8 porque concentra la lógica central: filtrar candidatos, delegar a la estrategia y cambiar de estado, con más casos borde. AQ-26 vale 2 porque reutiliza el Observer de AQ-25 y solo agrega un observador.
+
+  **Definition of Done de la v2** (también registrado en la descripción de la épica AQ-18):
+  - El código compila sin warnings.
+  - Las pruebas unitarias pasan (JUnit 5).
+  - JaCoCo reporta ≥ 80% de line coverage para la feature.
+  - El PR tiene revisión aprobada por al menos otro miembro.
+  - El diagrama C4 y la plantilla DOSW están actualizados.
+<img width="848" height="497" alt="imagen" src="https://github.com/user-attachments/assets/8c0ed31c-dbc9-4d4f-b67f-3c12915f2730" />
 
 Reto 10 — Diagrama de Casos de Uso v2
-- [ ] Nuevo actor, include y extend
+- [x] Nuevo actor, include y extend
 - Evidencia:
 
-  **Fuente PlantUML:**
-  ```plantuml
-  @startuml
-  left to right direction
-  skinparam packageStyle rectangle
+<img width="1055" height="433" alt="imagen" src="https://github.com/user-attachments/assets/e91753a3-acfb-4b32-b314-6658ed91de4d" />
 
-  actor "Usuario ECI" as base
-  actor "Operador Hidrico" as operador
-  actor "Administrador ECI" as admin
-  actor "Solicitante" as solicitante
-  actor "Tecnico de Mantenimiento" as tecnico
-  actor "Centro de Control" as centro <<sistema>>
-
-  operador --|> base
-  admin --|> base
-
-  rectangle "AquaPort v2" {
-    usecase "Solicitar transporte" as UC1
-    usecase "Asignar mision automaticamente" as UC2
-    usecase "Validar condiciones hidricas" as UC3
-    usecase "Notificar fallo al tecnico" as UC4
-    usecase "Consultar estado de la flota" as UC5
-    usecase "Cambiar estrategia de seleccion" as UC6
-    usecase "Gestionar drones de la flota" as UC7
-    usecase "Atender drone en FALLO" as UC8
-  }
-
-  solicitante --> UC1
-  UC1 ..> UC2 : <<include>>
-  UC2 ..> UC3 : <<include>>
-  UC4 ..> UC2 : <<extend>>
-  note right of UC4
-    Condicion: hay un drone en
-    estado FALLO durante la asignacion
-  end note
-  UC2 --> centro
-  base --> UC5
-  operador --> UC6
-  admin --> UC7
-  tecnico --> UC8
-  UC4 --> tecnico
-  @enduml
-  ```
+<img width="831" height="644" alt="imagen" src="https://github.com/user-attachments/assets/f3f995c2-9bf5-4f7b-8e99-b8e9170f4017" />
 
   **Decisiones del diagrama:**
   - `<<include>>` "Validar condiciones hídricas": siempre ocurre; sin validar el agua no se puede asignar.
@@ -339,8 +361,90 @@ Reto 10 — Diagrama de Casos de Uso v2
   - Generalización: Operador Hídrico y Administrador ECI heredan del actor base "Usuario ECI" el CU "Consultar estado de la flota"; cada uno conserva sus CU propios.
 
 Reto 11 — Mocks con IA
-- [ ] 3 pantallas + alerta, 4 prompts
+- [x] 3 pantallas + alerta, 4 prompts
 - Evidencia:
+<img width="1500" height="573" alt="Screenshot 2026-10-09 182834" src="https://github.com/user-attachments/assets/8078cb2d-7847-4dff-9dfe-0e9c2a9e2c95" />
+<img width="1486" height="787" alt="Screenshot 2026-10-09 182850" src="https://github.com/user-attachments/assets/c55fb59d-bb80-4baa-8d20-680720e0487c" />
+<img width="1496" height="657" alt="Screenshot 2026-10-09 182916" src="https://github.com/user-attachments/assets/ca622271-579c-4a74-bb03-580ee10c5791" />
+<img width="1181" height="763" alt="Screenshot 2026-10-09 183212" src="https://github.com/user-attachments/assets/6919d747-6141-4adc-a0dd-43a99e463b6f" />
+<img width="1180" height="881" alt="Screenshot 2026-10-09 183352" src="https://github.com/user-attachments/assets/277b72e8-20ed-4dc1-ad92-0489811cc6cd" />
+
+<img width="997" height="690" alt="imagen" src="https://github.com/user-attachments/assets/f9b0198a-f27f-400d-998f-dc97d37ec5eb" />
+
+
+  **Bloque de estilo (va al inicio de cada prompt):**
+  ```
+  Actúa como diseñador UX/UI senior de sistemas de monitoreo ambiental.
+  SISTEMA: AquaPort v2 — panel de control de una flota de 15 drones acuáticos de la Escuela Colombiana de Ingeniería.
+  ESTILO: dashboard técnico, fondo oscuro #0B1622, superficies #12202E, primario #0B3C5D, acento #1D9A9F.
+  Tipografía Inter para la interfaz y JetBrains Mono para IDs de drones (AR-01…AR-15) y códigos de misión (M-301).
+  COLORES DE ESTADO: Disponible #4CD9B0, En misión #2F80ED, Recargando #F0A830, Mantenimiento #8A94A6, Fallo #E25C5C, Sumergido #1B2A6B.
+  BATERÍA: ≥60% verde, 35-59% ámbar, <35% rojo con ícono de advertencia.
+  Diseño minimalista, flat, sin ilustraciones decorativas. Textos en español.
+  ```
+
+  **Prompt 0 — Componente "Tarjeta de drone acuático" (reto 08):**
+  ```
+  [bloque de estilo]
+  Diseña el componente "Tarjeta de drone acuático" en sus 6 estados, uno al lado del otro:
+  Disponible, En misión, Recargando, Mantenimiento, Fallo y Sumergido.
+  Cada tarjeta muestra solo: ID en JetBrains Mono (ej. AR-07), tipo (Superficial / Semisumergido / Buceador),
+  indicador de batería en % con su color, zona actual y una etiqueta del estado con su color.
+  El estado Fallo tiene borde rojo de 2 px y un ícono de alerta. Agrega debajo el botón "Asignar misión"
+  en sus 5 estados: default, hover, procesando (spinner), éxito y deshabilitado.
+  ```
+
+  **Prompt 1 — Pantalla 1: Panel de flota:**
+  ```
+  [bloque de estilo]
+  PANTALLA: Panel de flota (vista principal del Operador Hídrico).
+  Muestra los 15 drones agrupados en 3 columnas por tipo: Superficial (AR-01 a AR-05), Semisumergido (AR-06 a AR-10)
+  y Buceador (AR-11 a AR-15), usando la tarjeta de drone. Arriba, 4 indicadores: drones disponibles, en misión,
+  en fallo y misiones pendientes. A la derecha, la cola de misiones ordenada por prioridad (CRÍTICA arriba en rojo).
+  Muestra un selector de estrategia activa: "Mayor batería" / "Zona cercana".
+  Botón de emergencia "Detener misión" grande, rojo, anclado abajo a la derecha (Ley de Fitts).
+  ```
+
+  **Prompt 2 — Pantalla 2: Detalle de misión con drone recomendado:**
+  ```
+  [bloque de estilo]
+  PANTALLA: Detalle de la misión M-301.
+  Datos de la misión: zona destino Laguna Sur, carga EQUIPO_MEDICION de 1200 g, prioridad ALTA.
+  Panel "Drone recomendado por el sistema": AR-09, Semisumergido, batería 83%, zona Laboratorio Hídrico.
+  Bloque "¿Por qué este drone?" con 3 viñetas: capacidad 1500 g ≥ 1200 g; batería 83% ≥ 35%;
+  estrategia activa "Zona cercana".
+  Bloque "Descartados": AR-07 (en FALLO), Buceadores (capacidad 300 g insuficiente).
+  Botones: "Confirmar asignación" (primario) y "Cancelar" (secundario, separado).
+  ```
+
+  **Prompt 3 — Pantalla 3: Confirmación de asignación:**
+  ```
+  [bloque de estilo]
+  PANTALLA: Confirmación de asignación.
+  Mensaje de éxito: "Misión M-301 asignada a AR-09" con código de misión en JetBrains Mono.
+  Debajo, la flota actualizada agrupada por tipo, donde AR-09 ahora aparece en estado En misión (azul)
+  y AR-07 sigue en Fallo (rojo). Línea de tiempo corta: Solicitud recibida → Drone seleccionado →
+  Centro de Control notificado. Botón "Volver al panel de flota".
+  ```
+
+  **Prompt 4 — Estado de alerta: misión CRÍTICA sin drone:**
+  ```
+  [bloque de estilo]
+  PANTALLA: Panel de flota en estado de ALERTA.
+  Banner rojo superior fijo: "Misión CRÍTICA M-303 sin drone disponible — carga de 2000 g supera la capacidad
+  de toda la flota". Botones en el banner: "Notificar al Centro de Control" y "Ver misión".
+  La misión M-303 aparece primera en la cola, resaltada en rojo. En la flota, AR-07 en Fallo con borde rojo
+  y la etiqueta "Técnico notificado". El resto de la pantalla igual al panel de flota.
+  ```
+
+  **Heurísticas de Nielsen que deben cumplir las pantallas:**
+  | # | Heurística | Dónde se ve |
+  |---|---|---|
+  | 1 | Visibilidad del estado del sistema | Colores de estado en cada tarjeta y banner de alerta siempre visible. |
+  | 3 | Control y libertad del usuario | "Cancelar" en el detalle de misión y "Detener misión" de emergencia. |
+  | 5 | Prevención de errores | Drones con batería < 35% y tipos sin capacidad aparecen como descartados antes de confirmar. |
+  | 8 | Diseño minimalista | Cada tarjeta solo muestra ID, tipo, batería y estado. |
+  | 10 | Ayuda y documentación | El bloque "¿Por qué este drone?" explica la decisión del sistema. |
 
 Reto 12 — TDD con Mockito: `AsignadorAutomatico`
 - [x] Pruebas antes que código, mocks de dependencias, casos edge
@@ -366,6 +470,7 @@ Reto 12 — TDD con Mockito: `AsignadorAutomatico`
   | Regla del buceador | `buceador_cargaMayorA300_noEsCandidato` | Con 301 g el buceador queda fuera. |
 
   **Cobertura de `AsignadorAutomatico` (ejercicio12):** 100% de líneas y 100% de ramas.
+<img width="910" height="514" alt="imagen" src="https://github.com/user-attachments/assets/c2c5652a-adc5-4a58-bddc-cc1af3812f93" />
 
 Reto 13 — JaCoCo con Quality Gate
 - [x] El build falla si la cobertura baja del 80%
@@ -396,7 +501,34 @@ Reto 13 — JaCoCo con Quality Gate
   | Líneas (total) | **98.5%** |
   | Ramas (total) | **100%** |
   | Clase con menor cobertura | `ejercicio12.DroneAcuatico` — 86% de líneas |
+<img width="870" height="499" alt="imagen" src="https://github.com/user-attachments/assets/44f18f40-dbdb-4c49-862b-ec2ab1b784a6" />
 
 Reto 14 — SonarQube
-- [ ] 0 bugs, 0 vulnerabilidades, deuda < 30 min, duplicación < 5%
+- [x] 0 bugs, 0 vulnerabilidades, deuda < 30 min, duplicación < 5%
 - Evidencia:
+
+  **Primer análisis (v2.0.0):** 0 bugs, 0 vulnerabilidades, 17 code smells (160 min de deuda), cobertura 80.4% y duplicación 16.3%. Quality Gate en verde, pero la deuda y la duplicación estaban por encima de lo que pide el reto.
+
+  **Issues resueltos** (cada commit documenta causa raíz, corrección y por qué es la adecuada):
+  | Regla | Cantidad | Causa raíz | Corrección | Commit |
+  |---|---|---|---|---|
+  | `java:S1135` TODO pendiente | 2 | La palabra "todo" en el comentario de `ObservadorMision` ("no todo observador…") se interpretaba como TODO. | Se reformuló el comentario; no había ninguna tarea pendiente. | `refactor: reescribir comentario de ObservadorMision…` |
+  | `java:S1192` literales duplicados | 3 | Los nombres de zona se repetían hasta 7 veces en `ejercicio1/Main`. | Constantes privadas para las 5 zonas: un solo punto de cambio. | `refactor: constantes para los nombres de zona…` |
+  | `java:S106` uso de `System.out` | 12 | Los `Main` y los observadores escribían directo en consola. | Los observadores reciben su canal de salida por constructor (`Consumer<String>`, DIP). Los `Main` usan `java.util.logging.Logger` con suppliers. Las pruebas verifican los mensajes con una lista en lugar de secuestrar `System.out`. | `refactor: reemplazar System.out por Logger…` |
+
+  **Duplicación:** `ejercicio12` copia a propósito el modelo de `ejercicio3`, porque cada ejercicio es autocontenido (reto 12: TDD desde cero sobre el mismo dominio). Esa copia es una decisión de organización del repositorio, no código duplicado dentro del sistema, así que se excluyó del cálculo con `sonar.cpd.exclusions=**/ejercicio12/**` en el `pom.xml`. El código de `ejercicio12` **sí** se sigue analizando para bugs, vulnerabilidades y code smells; solo se excluye de la métrica de duplicación.
+
+  **Cobertura:** se excluyeron los `Main` (`sonar.coverage.exclusions=**/Main.java`) con el mismo criterio del quality gate de JaCoCo (reto 13): solo imprimen la demo de cada reto.
+
+  **Resultado final (Overall Code, versión 2.0.0, 653 líneas):**
+  | Indicador | Meta del reto | Resultado |
+  |---|---|---|
+  | Bugs (Reliability) | 0 | **0**  |
+  | Vulnerabilidades (Security) | 0 | **0**  |
+  | Deuda técnica (Maintainability) | < 30 min | **0 issues, 0 min**  |
+  | Duplicación | < 5% | **0.0%**  |
+  | Cobertura | — | **98.8%** |
+  | Quality Gate | Passed | **Passed**  |
+  <img width="1690" height="599" alt="imagen" src="https://github.com/user-attachments/assets/b77824ff-0384-4167-b964-9d95fe4ba25e" />
+  <img width="862" height="477" alt="imagen" src="https://github.com/user-attachments/assets/e37b8640-bd59-4187-93ba-1bf0d92ba10d" />
+
