@@ -22,6 +22,7 @@ Generado automaticamente con `scripts/generar-changelog.sh` a partir de los comm
 - pruebas del AnalizadorRedHidrica y del Collector en stream paralelo
 
 ### Documentacion
+- evidencia de los retos 02, 04, 12, 13 y 14 de Empoleon y CHANGELOG actualizado
 - README de Empoleon con estructura por capas y evidencia de los retos 01, 02 y 03
 - CHANGELOG generado desde los commits
 - resultado final de SonarQube en Prinplup (reto 14 completo)
