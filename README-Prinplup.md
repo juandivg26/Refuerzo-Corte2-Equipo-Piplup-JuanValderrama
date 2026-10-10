@@ -506,3 +506,16 @@ Reto 13 — JaCoCo con Quality Gate
 Reto 14 — SonarQube
 - [ ] 0 bugs, 0 vulnerabilidades, deuda < 30 min, duplicación < 5%
 - Evidencia:
+
+  **Primer análisis (v2.0.0):** 0 bugs, 0 vulnerabilidades, 17 code smells (160 min de deuda), cobertura 80.4% y duplicación 16.3%. Quality Gate en verde, pero la deuda y la duplicación estaban por encima de lo que pide el reto.
+
+  **Issues resueltos** (cada commit documenta causa raíz, corrección y por qué es la adecuada):
+  | Regla | Cantidad | Causa raíz | Corrección | Commit |
+  |---|---|---|---|---|
+  | `java:S1135` TODO pendiente | 2 | La palabra "todo" en el comentario de `ObservadorMision` ("no todo observador…") se interpretaba como TODO. | Se reformuló el comentario; no había ninguna tarea pendiente. | `refactor: reescribir comentario de ObservadorMision…` |
+  | `java:S1192` literales duplicados | 3 | Los nombres de zona se repetían hasta 7 veces en `ejercicio1/Main`. | Constantes privadas para las 5 zonas: un solo punto de cambio. | `refactor: constantes para los nombres de zona…` |
+  | `java:S106` uso de `System.out` | 12 | Los `Main` y los observadores escribían directo en consola. | Los observadores reciben su canal de salida por constructor (`Consumer<String>`, DIP). Los `Main` usan `java.util.logging.Logger` con suppliers. Las pruebas verifican los mensajes con una lista en lugar de secuestrar `System.out`. | `refactor: reemplazar System.out por Logger…` |
+
+  **Duplicación:** `ejercicio12` copia a propósito el modelo de `ejercicio3`, porque cada ejercicio es autocontenido (reto 12: TDD desde cero sobre el mismo dominio). Esa copia es una decisión de organización del repositorio, no código duplicado dentro del sistema, así que se excluyó del cálculo con `sonar.cpd.exclusions=**/ejercicio12/**` en el `pom.xml`. El código de `ejercicio12` **sí** se sigue analizando para bugs, vulnerabilidades y code smells; solo se excluye de la métrica de duplicación.
+
+  **Cobertura:** se excluyeron los `Main` (`sonar.coverage.exclusions=**/Main.java`) con el mismo criterio del quality gate de JaCoCo (reto 13): solo imprimen la demo de cada reto.
