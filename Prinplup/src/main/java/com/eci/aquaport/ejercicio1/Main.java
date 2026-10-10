@@ -1,6 +1,7 @@
 package com.eci.aquaport.ejercicio1;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Main {
 
@@ -39,11 +40,15 @@ public class Main {
 
         ConsultorFlota consultor = new ConsultorFlota();
 
-        System.out.println("1) Disponibles por tipo: " + consultor.agruparDisponiblesPorTipo(flota));
-        System.out.println("2) Drone optimo para Embalse Norte (BUCEADOR): "
+        // Formato de una linea: solo el mensaje, sin fecha ni nivel
+        System.setProperty("java.util.logging.SimpleFormatter.format", "%5$s%n");
+        Logger log = Logger.getLogger(Main.class.getName());
+
+        log.info(() -> "1) Disponibles por tipo: " + consultor.agruparDisponiblesPorTipo(flota));
+        log.info(() -> "2) Drone optimo para Embalse Norte (BUCEADOR): "
                 + consultor.droneOptimoParaZona(flota, EMBALSE_NORTE, TipoDrone.BUCEADOR));
-        System.out.println("3) Promedio de bateria por tipo: " + consultor.promedioBateriaPorTipo(flota));
-        System.out.println("4) Misiones criticas (true) vs demas (false): " + consultor.separarCriticas(misiones));
-        System.out.println("5) Zonas cubiertas por la flota activa: " + consultor.zonasCubiertasPorFlotaActiva(flota));
+        log.info(() -> "3) Promedio de bateria por tipo: " + consultor.promedioBateriaPorTipo(flota));
+        log.info(() -> "4) Misiones criticas (true) vs demas (false): " + consultor.separarCriticas(misiones));
+        log.info(() -> "5) Zonas cubiertas por la flota activa: " + consultor.zonasCubiertasPorFlotaActiva(flota));
     }
 }
