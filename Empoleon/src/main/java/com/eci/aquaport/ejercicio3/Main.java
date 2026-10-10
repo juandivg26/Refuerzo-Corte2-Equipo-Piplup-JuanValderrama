@@ -23,38 +23,39 @@ import static com.eci.aquaport.ejercicio3.dominio.ZonaHidrica.RED_CANALES;
 /** Raiz de composicion: unico lugar donde se crean las implementaciones de infraestructura. */
 public class Main {
 
-    public static void main(String[] args) {
-        // Formato de una linea: solo el mensaje, sin fecha ni nivel
-        System.setProperty("java.util.logging.SimpleFormatter.format", "%5$s%n");
-        Logger log = Logger.getLogger(Main.class.getName());
-        RegistroTelemetria telemetria = (id, evento) -> log.info(() -> "   [TELEMETRIA " + id + "] " + evento);
+    private static final Logger LOG = configurarLogger();
+    private static final RegistroTelemetria TELEMETRIA =
+            (id, evento) -> LOG.info(() -> "   [TELEMETRIA " + id + "] " + evento);
 
+    public static void main(String[] args) {
         ValidadorMision cadena = ServicioAsignacion.cadenaEstandar(
                 Set.of(EMBALSE_INVESTIGACION, LAGUNA_RESERVA, LAB_HIDRICO_CENTRAL),
                 new AdaptadorAPIHidrica(new ClienteApiHidricaSimulado()));
         ServicioAsignacion servicio = new ServicioAsignacion(cadena);
-
         List<Drone> flota = List.of(
                 new DroneAcuatico("AR-01", TipoDrone.BUCEADOR, 90, EMBALSE_INVESTIGACION),
                 new DroneAcuatico("AR-16", TipoDrone.SUPERFICIAL, 75, RED_CANALES),
                 new DroneAcuatico("AR-31", TipoDrone.SEMISUMERGIDO, 30, LAGUNA_RESERVA));
+        List.of(new Mision("M-601", 250, LAB_HIDRICO_CENTRAL), new Mision("M-602", 400, LAGUNA_RESERVA),
+                        new Mision("M-603", 200, RED_CANALES), new Mision("M-604", 2000, EMBALSE_INVESTIGACION))
+                .forEach(m -> procesar(m, servicio, cadena, flota));
+    }
 
-        List<Mision> misiones = List.of(
-                new Mision("M-601", 250, LAB_HIDRICO_CENTRAL),
-                new Mision("M-602", 400, LAGUNA_RESERVA),
-                new Mision("M-603", 200, RED_CANALES),
-                new Mision("M-604", 2000, EMBALSE_INVESTIGACION));
+    private static void procesar(Mision m, ServicioAsignacion servicio, ValidadorMision cadena, List<Drone> flota) {
+        servicio.asignar(m, flota).ifPresentOrElse(
+                d -> {
+                    LOG.info(() -> m.id() + " asignada a " + d.id());
+                    new DroneConMonitoreo(d, TELEMETRIA).navegar(m.destino());
+                },
+                () -> {
+                    LOG.info(() -> m.id() + " rechazada; motivo por drone:");
+                    flota.forEach(d -> LOG.info(() -> "   " + d.id() + ": " + cadena.validar(d, m).orElse("apto")));
+                });
+    }
 
-        for (Mision m : misiones) {
-            servicio.asignar(m, flota).ifPresentOrElse(
-                    d -> {
-                        log.info(() -> m.id() + " asignada a " + d.id());
-                        new DroneConMonitoreo(d, telemetria).navegar(m.destino());
-                    },
-                    () -> {
-                        log.info(() -> m.id() + " rechazada; motivo por drone:");
-                        flota.forEach(d -> log.info(() -> "   " + d.id() + ": " + cadena.validar(d, m).orElse("apto")));
-                    });
-        }
+    private static Logger configurarLogger() {
+        // Formato de una linea: solo el mensaje, sin fecha ni nivel
+        System.setProperty("java.util.logging.SimpleFormatter.format", "%5$s%n");
+        return Logger.getLogger(Main.class.getName());
     }
 }
