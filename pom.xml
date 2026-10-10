@@ -14,6 +14,10 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.2</junit.version>
+        <!-- ejercicio12 copia a proposito el modelo de ejercicio3 para que cada reto sea autocontenido -->
+        <sonar.cpd.exclusions>**/ejercicio12/**</sonar.cpd.exclusions>
+        <!-- Igual que JaCoCo: los Main solo imprimen la demo de cada reto -->
+        <sonar.coverage.exclusions>**/Main.java</sonar.coverage.exclusions>
     </properties>
 
     <dependencies>
