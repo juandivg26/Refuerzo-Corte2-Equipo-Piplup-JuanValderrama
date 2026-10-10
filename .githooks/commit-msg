@@ -1,0 +1,17 @@
+#!/bin/sh
+# Rechaza el commit si la primera linea no sigue Conventional Commits.
+# Activar una vez por clon:  git config core.hooksPath .githooks
+
+primera_linea=$(head -n 1 "$1")
+
+case "$primera_linea" in
+    Merge*|Revert*) exit 0 ;;
+esac
+
+if ! echo "$primera_linea" | grep -Eq '^(feat|fix|refactor|test|docs|build|chore|style|perf|ci)(\([a-z0-9-]+\))?!?: .+'; then
+    echo "ERROR: el mensaje no sigue Conventional Commits:" >&2
+    echo "  \"$primera_linea\"" >&2
+    echo "Formato: <tipo>(alcance opcional): descripcion" >&2
+    echo "Tipos validos: feat fix refactor test docs build chore style perf ci" >&2
+    exit 1
+fi
