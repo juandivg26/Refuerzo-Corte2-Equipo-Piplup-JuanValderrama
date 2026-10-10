@@ -8,6 +8,7 @@ public class DroneAcuatico implements Drone {
     private final TipoDrone tipo;
     private int bateria;
     private ZonaHidrica zona;
+    private EstadoDrone estado = EstadoDrone.OPERATIVO;
 
     public DroneAcuatico(String id, TipoDrone tipo, int bateria, ZonaHidrica zona) {
         this.id = id;
@@ -20,6 +21,11 @@ public class DroneAcuatico implements Drone {
     @Override public TipoDrone tipo() { return tipo; }
     @Override public int bateria() { return bateria; }
     @Override public ZonaHidrica zona() { return zona; }
+    @Override public EstadoDrone estado() { return estado; }
+
+    public void reportarFallo() {
+        estado = EstadoDrone.FALLO;
+    }
 
     @Override
     public void navegar(ZonaHidrica destino) {

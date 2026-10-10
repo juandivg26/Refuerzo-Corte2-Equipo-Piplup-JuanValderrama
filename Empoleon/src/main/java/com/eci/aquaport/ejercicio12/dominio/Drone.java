@@ -11,6 +11,8 @@ public interface Drone {
 
     ZonaHidrica zona();
 
+    EstadoDrone estado();
+
     /** Recorre un tramo hasta el destino: cambia de zona y consume bateria. */
     void navegar(ZonaHidrica destino);
 }
