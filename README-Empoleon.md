@@ -549,7 +549,21 @@ Reto 13 — JaCoCo + SonarQube Enterprise
 
   **Estándares de código:** todos los métodos tienen 15 líneas o menos y la clase más larga tiene 77 líneas (`EjecutorRuta`), dentro del límite de 150. Los `Main` se dividieron en métodos pequeños para cumplirlo (commit `refactor: dividir los Main...`).
 
-  **SonarQube:** pendiente de correr el análisis del nivel Empoleon.
+  **SonarQube** (proyecto `aquaport-empoleon`, versión 3.0.0-SNAPSHOT):
+
+  | Indicador | Meta Enterprise | Primer análisis |
+  |---|---|---|
+  | Bugs (Reliability) | 0 | **0** ✅ |
+  | Vulnerabilidades (Security) | 0 | **0** ✅ |
+  | Deuda técnica (Maintainability) | < 15 min | **0 min** ✅ (1 issue de severidad Info, esfuerzo 0 min) |
+  | Duplicación | < 3% | **0.0%** ✅ |
+  | Cobertura | ≥ 85% | **99.8%** ✅ |
+  | Quality Gate | Passed | **Passed** ✅ |
+
+  **Issue encontrado y resuelto:**
+  | Regla | Archivo | Causa raíz | Corrección | Commit |
+  |---|---|---|---|---|
+  | `xml:S1135` (TODO pendiente) | `pom.xml` línea 101 | El comentario del quality gate decía "en **todo** el proyecto" y Sonar interpretó la palabra "todo" como una etiqueta TODO. No había ninguna tarea pendiente. | Se reformuló como "a nivel de proyecto", con el mismo significado. Es el mismo falso positivo que ya se había corregido en Prinplup (`java:S1135`). | `fix: reformular comentario del pom que Sonar leia como TODO (xml:S1135)` |
 
 Reto 14 — Arquitectura por capas
 - [x] Auditoría de dependencias entre capas
