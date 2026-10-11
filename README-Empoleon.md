@@ -58,6 +58,7 @@ Reto 1 — Streams para rutas multi-etapa entre 60 drones
      RED_CANALES -> LAB_HIDRICO_CENTRAL con AR-30
   4) Bateria promedio por zona (Collector propio): {EMBALSE_INVESTIGACION=60.0, LAB_HIDRICO_CENTRAL=61.0, LAGUNA_RESERVA=60.67, RED_CANALES=60.33}
   ```
+<img width="967" height="673" alt="imagen" src="https://github.com/user-attachments/assets/26574188-7c8f-450c-85cc-a5c2b24e5f25" />
 
 Reto 2 — Historial de git limpio y trazable
 - [x] Hook de Conventional Commits, protección de ramas, CHANGELOG automático y 10+ commits del Enterprise
@@ -106,6 +107,7 @@ Reto 2 — Historial de git limpio y trazable
   sh scripts/generar-changelog.sh
   ```
   Resultado: [`CHANGELOG.md`](CHANGELOG.md).
+<img width="806" height="541" alt="imagen" src="https://github.com/user-attachments/assets/39ca023c-8c9e-48d4-9c75-8a27ba3ebb3b" />
 
 Reto 3 — Chain of Responsibility + Decorator + Adapter
 - [x] Los 3 patrones integrados en el flujo Enterprise, con pruebas Mockito
@@ -144,6 +146,7 @@ Reto 3 — Chain of Responsibility + Decorator + Adapter
      AR-16: La zona destino RED_CANALES esta inactiva
      AR-31: Bateria insuficiente: 30% (minimo 35%)
   ```
+<img width="594" height="536" alt="imagen" src="https://github.com/user-attachments/assets/ad65ccde-bb44-41d5-8dba-e8989a939aed" />
 
 Reto 4 — Auditoría SOLID
 - [x] Capas, constructor injection, dominio sin dependencias externas
@@ -180,47 +183,14 @@ Reto 4 — Auditoría SOLID
                                        └──────────────────────────────┘
   dominio: no depende de ninguna capa ni librería (solo java.*)
   ```
+<img width="699" height="430" alt="imagen" src="https://github.com/user-attachments/assets/0bdb5a8b-7f45-4a86-9fd2-06399cbcf238" />
 
 Reto 5 — C4 nivel 2: contenedores
-- [ ] Diagrama de contenedores en docs/c4-contenedores-empoleon.png
+- [x] Diagrama de contenedores en docs/c4-contenedores-empoleon.png
 - Evidencia:
+<img width="1024" height="639" alt="imagen" src="https://github.com/user-attachments/assets/652e83d1-82ad-4c73-8180-362952a30a8f" />
+<img width="652" height="471" alt="imagen" src="https://github.com/user-attachments/assets/6644022a-fa57-4a90-8476-ea5695e5f1c0" />
 
-  **Fuente PlantUML** (se renderiza en https://www.plantuml.com/plantuml):
-  ```plantuml
-  @startuml
-  !include <C4/C4_Container>
-  title AquaPort Enterprise - Diagrama de Contenedores (C4 nivel 2)
-
-  Person(solicitante, "Solicitante", "Pide transporte multi-etapa de muestras")
-  Person(operador, "Operador Hidrico", "Supervisa rutas y reasignaciones")
-  Person(tecnico, "Tecnico de Mantenimiento", "Atiende drones en FALLO")
-
-  System_Boundary(aquaport, "AquaPort Enterprise") {
-    Container(app, "Aplicacion principal", "Java 17", "Planifica rutas multi-etapa, asigna un drone por tramo, ejecuta y reasigna ante fallos (dominio + aplicacion)")
-    Container(telemetria, "Modulo de telemetria", "Java 17", "Registra el inicio y fin de cada tramo de cada drone (DroneConMonitoreo)")
-    Container(adaptador, "Adaptador API hidrica", "Java 17", "Traduce waterLevel/turbidity a NivelAgua/Turbidez (AdaptadorAPIHidrica)")
-    ContainerDb(db, "Base de datos de misiones", "PostgreSQL", "Solicitudes, tramos, estado de rutas y cadena de custodia")
-  }
-
-  System_Ext(apiHidrica, "API Condiciones Hidricas", "Nivel de agua y turbidez por zona")
-  System_Ext(centro, "Centro de Control ECI", "Autoriza rutas entre zonas")
-  System_Ext(alertas, "Sistema de Alertas", "Distribuye alertas de fallo")
-  System_Ext(zonas, "Estaciones de las 4 zonas hidricas", "Embalse, Canales, Laguna, Laboratorio: confirman llegada a waypoints")
-
-  Rel(solicitante, app, "Solicitud multi-etapa (paradas, carga)", "HTTPS/JSON")
-  Rel(app, solicitante, "Codigo de mision, estado de la ruta", "HTTPS/JSON")
-  Rel(operador, app, "Supervision de rutas y reasignaciones", "HTTPS")
-  Rel(app, adaptador, "Consulta condiciones de la zona destino del tramo", "llamada Java (puerto ServicioCondicionesHidricas)")
-  Rel(adaptador, apiHidrica, "GET condiciones por zoneCode", "HTTPS/JSON")
-  Rel(app, telemetria, "Eventos de inicio/fin de tramo", "llamada Java (puerto RegistroTelemetria)")
-  Rel(app, db, "Lee/escribe solicitudes, tramos y custodia", "JDBC/SQL")
-  Rel(telemetria, db, "Guarda lecturas de telemetria", "JDBC/SQL")
-  Rel(app, centro, "Solicitud de autorizacion de ruta entre zonas", "HTTPS/JSON")
-  Rel(app, alertas, "Drone en FALLO, custodia interrumpida", "AMQP (cola de mensajes)")
-  Rel(alertas, tecnico, "Drone a revisar (id, tipo, zona)", "SMS/Push")
-  Rel(zonas, app, "Confirmacion de llegada a waypoint", "MQTT")
-  @enduml
-  ```
 
   **Qué cambió respecto al nivel 1 (Prinplup):** el nivel 1 mostraba AquaPort como una caja negra. El nivel 2 la abre en 4 contenedores, y cada línea indica el **protocolo** y el **dato** que fluye. El adaptador y la telemetría coinciden con las clases de infraestructura del reto 03, y la aplicación principal con las capas de dominio y aplicación del reto 12.
 
@@ -263,6 +233,7 @@ Reto 6 — RF y RNF Enterprise
   | AP-18 vs AP-15 | Preferir el drone de la zona de origen (AP-18) puede dejar sin drone a un tramo posterior que lo necesitaba (AP-15). | La preferencia es local por tramo y un drone no se reutiliza; si un tramo no tiene drone, la ruta completa no se planifica (`RutaNoPlanificableException`) en vez de quedar a medias. |
   | RNF-09 vs AP-18 | Validar condiciones hídricas con la API externa en cada reasignación puede romper los 2 s. | El adaptador es el único punto de acceso a la API; si se necesita, se agrega caché por zona en infraestructura sin tocar el dominio. |
   | RNF-11 vs RNF-10 | Registrar cada traspaso con 5 años de retención agrega escritura en cada waypoint. | La custodia se escribe en la base de misiones de forma asíncrona; el registro en memoria (`CadenaCustodia`) garantiza que no se pierda durante la ruta. |
+<img width="621" height="501" alt="imagen" src="https://github.com/user-attachments/assets/93ec8a0c-6454-4361-8b2d-3d5eeb7602f6" />
 
 Reto 7 — Plantilla DOSW (RF AP-15)
 - [x] Misión multi-etapa con waypoints, 8+ pasos
@@ -344,9 +315,10 @@ Implementado en `PlanificadorRuta`, `EjecutorRuta`, `CadenaCustodia` y la cadena
 | Elaborado por | Aprobado por | Fecha | Descripción y Justificación de Cambios |
 |---|---|---|---|
 | Equipo Piplup | | 10/10/2026 | Versión inicial del documento para el nivel Enterprise. |
+<img width="529" height="424" alt="imagen" src="https://github.com/user-attachments/assets/36ced7db-a060-4d3d-a738-3dbd241a9612" />
 
 Reto 8 — Design system y mapa de flujos
-- [ ] Tokens, componentes, 6 pantallas, WCAG AA
+- [x] Tokens, componentes, 6 pantallas, WCAG AA
 - Evidencia:
 
   **Tokens de diseño** (evolución del manual de Piplup y del sistema de Prinplup):
@@ -381,6 +353,12 @@ Reto 8 — Design system y mapa de flujos
   | Sumergido original `#1B2A6B` | **1.38:1** | ❌ No cumple; se reemplazó |
   | Sumergido ajustado `#7B8CDE` | 5.77:1 | ✅ AA |
   | Primario `#0B3C5D` como texto | 1.58:1 | ❌ Por eso solo se usa como superficie |
+<img width="1258" height="864" alt="Screenshot 2026-10-10 193307" src="https://github.com/user-attachments/assets/24ddec61-b218-4365-90fe-ca415a68b2af" />
+<img width="1261" height="878" alt="Screenshot 2026-10-10 193642" src="https://github.com/user-attachments/assets/5c146f31-090f-40df-b806-d62e1cc0631a" />
+<img width="1253" height="733" alt="Screenshot 2026-10-10 193946" src="https://github.com/user-attachments/assets/834c28b9-1fe0-4665-a20e-b021cdbdefe5" />
+<img width="1261" height="746" alt="Screenshot 2026-10-10 194121" src="https://github.com/user-attachments/assets/e07a7cda-cd46-48e9-8e58-ce32864567d3" />
+<img width="1265" height="780" alt="Screenshot 2026-10-10 194208" src="https://github.com/user-attachments/assets/d81049f5-2be2-4693-9dd4-c48fc7d846f5" />
+<img width="1259" height="525" alt="Screenshot 2026-10-10 194231" src="https://github.com/user-attachments/assets/50277a45-5847-410b-8213-a71b85c60f65" />
 
   Además, el estado nunca se comunica solo con color: cada tarjeta lleva la etiqueta escrita (DISPONIBLE, FALLO…) y un ícono, para personas con daltonismo.
 
@@ -397,6 +375,7 @@ Reto 8 — Design system y mapa de flujos
   | 6 | Reporte de entrega y custodia | **Jakob:** se presenta como una línea de tiempo vertical, un formato que el usuario ya conoce de los rastreos de paquetes. |
 
   Los prompts para generar estas pantallas están en el reto 11.
+<img width="581" height="461" alt="imagen" src="https://github.com/user-attachments/assets/db1af1fd-d384-4a43-9dc4-4dc972dea984" />
 
 Reto 9 — Roadmap en Jira
 - [x] 3 sprints, DoD Enterprise y retrospectiva
@@ -428,64 +407,26 @@ Reto 9 — Roadmap en Jira
   **Retrospectiva real del sprint v2 (Prinplup)**, registrada como comentario en la épica AQ-18:
   | | |
   |---|---|
-  | ✅ **Qué funcionó** | TDD con commits separados (Red → Green) que demuestran que las pruebas fueron primero; una rama y un PR pequeño por patrón (#7 a #12); el quality gate de JaCoCo desde el inicio, que mostró 9 clases sin cubrir antes de cerrar el sprint. |
-  | ❌ **Qué no funcionó** | Se editó el README directo en `main` y en `Develop`, las ramas divergieron y hubo que sincronizarlas con PRs (#18, #19); SonarQube se corrió al final (17 smells, 160 min de deuda, 16.3% de duplicación); la duplicación entre ejercicios no se planeó. |
-  | 🔁 **Qué cambiaremos** | Ramas protegidas (aplicado en el reto 02); hook de Conventional Commits y CHANGELOG automático (aplicado); SonarQube al cierre de cada sprint (tarea AQ-37 desde el roadmap); reglas de capas verificadas en cada build con ArchUnit (reto 14). |
+  | **Qué funcionó** | TDD con commits separados (Red → Green) que demuestran que las pruebas fueron primero; una rama y un PR pequeño por patrón (#7 a #12); el quality gate de JaCoCo desde el inicio, que mostró 9 clases sin cubrir antes de cerrar el sprint. |
+  | **Qué no funcionó** | Se editó el README directo en `main` y en `Develop`, las ramas divergieron y hubo que sincronizarlas con PRs (#18, #19); SonarQube se corrió al final (17 smells, 160 min de deuda, 16.3% de duplicación); la duplicación entre ejercicios no se planeó. |
+  | **Qué cambiaremos** | Ramas protegidas (aplicado en el reto 02); hook de Conventional Commits y CHANGELOG automático (aplicado); SonarQube al cierre de cada sprint (tarea AQ-37 desde el roadmap); reglas de capas verificadas en cada build con ArchUnit (reto 14). |
+<img width="495" height="439" alt="imagen" src="https://github.com/user-attachments/assets/56710400-7254-4b0d-8446-d71870945270" />
 
 Reto 10 — Diagrama de CU con flujos de fallo
-- [ ] 5 extends con su condición
+- [x] 5 extends con su condición
 - Evidencia:
-
-  **Fuente PlantUML:**
-  ```plantuml
-  @startuml
-  left to right direction
-  skinparam packageStyle rectangle
-
-  actor "Solicitante" as solicitante
-  actor "Operador Hidrico" as operador
-  actor "Tecnico de Mantenimiento" as tecnico
-  actor "API Condiciones Hidricas" as api <<sistema>>
-
-  rectangle "AquaPort Enterprise" {
-    usecase "Solicitar mision multi-etapa" as UC1
-    usecase "Planificar ruta por tramos" as UC2
-    usecase "Validar condiciones hidricas" as UC3
-    usecase "Ejecutar tramo y traspasar custodia" as UC4
-    usecase "Reasignar drone por fallo en waypoint" as EX1
-    usecase "Desviar ruta por condicion adversa" as EX2
-    usecase "Rechazar tramo a zona inactiva" as EX3
-    usecase "Registrar custodia interrumpida" as EX4
-    usecase "Reasignar drone por bateria critica" as EX5
-    usecase "Supervisar rutas activas" as UC5
-    usecase "Atender drone en FALLO" as UC6
-  }
-
-  solicitante --> UC1
-  UC1 ..> UC2 : <<include>>
-  UC2 ..> UC3 : <<include>>
-  UC3 --> api
-  UC2 ..> UC4 : <<include>>
-  EX1 ..> UC4 : <<extend>>\n[drone en FALLO al iniciar el tramo]
-  EX2 ..> UC2 : <<extend>>\n[turbidez > 50 NTU o nivel < 0.5 m en el tramo]
-  EX3 ..> UC2 : <<extend>>\n[zona destino del tramo inactiva]
-  EX4 ..> UC4 : <<extend>>\n[el drone falla durante el tramo con la muestra]
-  EX5 ..> UC4 : <<extend>>\n[bateria < 35% al iniciar el tramo]
-  operador --> UC5
-  tecnico --> UC6
-  EX4 --> tecnico
-  @enduml
-  ```
-
+<img width="1621" height="446" alt="Screenshot 2026-10-10 194433" src="https://github.com/user-attachments/assets/a0d119f8-94fa-4490-80c0-7dd560bf75e3" />
+  
   **Decisiones del diagrama:**
   - `<<include>>`: planificar siempre valida condiciones hídricas y siempre ejecuta tramos con traspaso de custodia.
   - Los 5 flujos alternos del Enterprise son `<<extend>>`, cada uno con su condición escrita en la flecha. Corresponden uno a uno a las pruebas del reto 12.
+<img width="488" height="553" alt="imagen" src="https://github.com/user-attachments/assets/a2eba31f-f97f-4e53-b59b-8a666e2c12c2" />
 
 Reto 11 — Mocks con IA
-- [ ] 5 pantallas y 5 prompts
+- [x] 5 pantallas y 5 prompts
 - Evidencia:
 
-  **Herramienta:** Figma Make o Google Stitch. Cada prompt empieza con el mismo bloque de estilo.
+  **Herramienta:** Gemini
 
   **Bloque de estilo:**
   ```
@@ -507,6 +448,8 @@ Reto 11 — Mocks con IA
   muestra ID, tipo y batería. Cada zona tiene un chip de condiciones: turbidez y nivel de agua (Laguna: 64 NTU, "condiciones adversas").
   Panel lateral con totales por estado y 2 rutas multi-etapa activas dibujadas sobre el mapa.
   ```
+  <img width="1258" height="864" alt="Screenshot 2026-10-10 193307" src="https://github.com/user-attachments/assets/005c603b-420e-44d4-8ef1-e4074108a300" />
+
 
   **Prompt 2 — Configuración de ruta multi-etapa con waypoints:**
   ```
@@ -515,6 +458,8 @@ Reto 11 — Mocks con IA
   Botón "+ Agregar waypoint". Las zonas inactivas aparecen deshabilitadas con el motivo. Debajo, la vista previa de la ruta
   como una línea con un nodo por parada. Botones "Planificar ruta" (primario) y "Cancelar".
   ```
+ <img width="1261" height="878" alt="Screenshot 2026-10-10 193642" src="https://github.com/user-attachments/assets/fbf4a007-0dfd-4ed2-bf0d-ee563c450da8" />
+ 
 
   **Prompt 3 — Monitoreo del progreso por tramo:**
   ```
@@ -523,6 +468,8 @@ Reto 11 — Mocks con IA
   y hora estimada de llegada. Panel inferior de telemetría con los últimos eventos: "Inicio tramo EMBALSE -> CANALES con 85%",
   "Fin tramo en RED_CANALES con 75%", "Traspaso en RED_CANALES: AR-01 -> AR-16".
   ```
+<img width="1253" height="733" alt="Screenshot 2026-10-10 193946" src="https://github.com/user-attachments/assets/fa309664-2bc6-4c71-aa19-8484456d50e1" />
+
 
   **Prompt 4 — Alerta de fallo en waypoint con reasignación automática:**
   ```
@@ -531,6 +478,8 @@ Reto 11 — Mocks con IA
   Tarjeta comparativa: drone saliente AR-16 (Fallo, rojo) → drone entrante AR-17 (Disponible, 80%, misma zona).
   Botones: "Ver detalle" y "Notificar al técnico" (grande, junto a la alerta — Ley de Fitts). AR-16 muestra "Técnico notificado".
   ```
+<img width="1261" height="746" alt="Screenshot 2026-10-10 194121" src="https://github.com/user-attachments/assets/bea6c40a-bfd9-45d1-a9a3-cf6c5fee117d" />
+
 
   **Prompt 5 — Reporte final de la cadena de custodia:**
   ```
@@ -541,6 +490,8 @@ Reto 11 — Mocks con IA
   Variante: si la custodia fue interrumpida, el evento final es rojo con "INTERRUMPIDA: AR-02 falló entre EMBALSE y CANALES".
   Botón "Exportar PDF".
   ```
+<img width="1265" height="780" alt="Screenshot 2026-10-10 194208" src="https://github.com/user-attachments/assets/4fa53542-58e5-4797-91fb-97667e332c80" />
+
 
   **Prompt 6 — Asignación por tramos (pantalla 3 del mapa de flujos del reto 08):**
   ```
@@ -549,6 +500,9 @@ Reto 11 — Mocks con IA
   Por tramo, un chip con las condiciones de la zona destino (turbidez y nivel). Máximo 4 datos por fila (Ley de Miller).
   Botones "Iniciar ruta" (primario) y "Cambiar drone" (secundario) por tramo.
   ```
+<img width="1259" height="525" alt="Screenshot 2026-10-10 194231" src="https://github.com/user-attachments/assets/93fc29cf-3e5a-41f3-a5c5-a11f6a6c40a1" />
+
+<img width="514" height="363" alt="imagen" src="https://github.com/user-attachments/assets/1827d9ae-73d9-4756-82af-9ff64837e05f" />
 
 Reto 12 — TDD de las 3 capas
 - [x] Unitarias, integración, JaCoCo ≥ 85% y los 5 flujos alternos probados
@@ -578,6 +532,7 @@ Reto 12 — TDD de las 3 capas
   | Batería crítica en mitad de ruta | `bateriaCriticaEnRutaReasigna` | Antes de cada tramo se revalida al drone; si bajó de 35%, su tramo se reasigna. |
   | Cadena de custodia interrumpida | `custodiaInterrumpida` | Si el drone falla durante el tramo con la muestra, la ruta termina en `CUSTODIA_INTERRUMPIDA` y no se notifica un waypoint que no se alcanzó. |
   | Condición hídrica adversa en un tramo | `condicionAdversaEnTramo` (+ `condicionesRealesDeLaApiBloqueanTramo`) | El tramo con turbidez por encima de 50 NTU no se puede planificar; en integración, la Laguna (64 NTU según la API) bloquea el tramo. |
+<img width="560" height="545" alt="imagen" src="https://github.com/user-attachments/assets/32a8ba2a-f357-459b-8d83-9068a9f7b2e6" />
 
 Reto 13 — JaCoCo + SonarQube Enterprise
 - [ ] 85% líneas, 75% ramas, 0 bugs, deuda < 15 min, duplicación < 3%
@@ -621,3 +576,5 @@ Reto 14 — Arquitectura por capas
   '..infraestructura..' ...' was violated (1 times)
   ```
   El cambio se revirtió. La tabla de imports por capa está en el reto 04.
+  <img width="498" height="377" alt="imagen" src="https://github.com/user-attachments/assets/8823b173-0271-4009-a538-b3cba52a3f1e" />
+
