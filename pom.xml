@@ -6,7 +6,7 @@
 
     <groupId>com.eci.aquaport</groupId>
     <artifactId>aquaport-refuerzo</artifactId>
-    <version>2.0.0</version>
+    <version>3.0.0</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -33,16 +33,22 @@
             <version>5.11.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5</artifactId>
+            <version>1.3.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <!--
-        NIVEL ACTIVO: Prinplup.
+        NIVEL ACTIVO: Empoleon.
         Para volver a compilar otro nivel, cambia las 2 rutas de abajo (sourceDirectory
-        y testSourceDirectory) a "Piplup" o "Empoleon".
+        y testSourceDirectory) a "Piplup" o "Prinplup".
     -->
     <build>
-        <sourceDirectory>${project.basedir}/Prinplup/src/main/java</sourceDirectory>
-        <testSourceDirectory>${project.basedir}/Prinplup/src/test/java</testSourceDirectory>
+        <sourceDirectory>${project.basedir}/Empoleon/src/main/java</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/Empoleon/src/test/java</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -92,11 +98,17 @@
                                 </rule>
                                 <rule>
                                     <element>BUNDLE</element>
+                                    <!-- Estandar Enterprise (Empoleon): >= 85% lineas y >= 75% ramas a nivel de proyecto -->
                                     <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.85</minimum>
+                                        </limit>
                                         <limit>
                                             <counter>BRANCH</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>0.70</minimum>
+                                            <minimum>0.75</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
