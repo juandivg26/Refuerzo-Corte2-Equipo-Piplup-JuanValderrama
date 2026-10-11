@@ -1,7 +1,7 @@
 #!/bin/sh
 # Genera CHANGELOG.md desde los commits: una seccion por version (tag) y, dentro, un grupo por tipo de commit.
 # Los commits que no siguen Conventional Commits (anteriores al hook) no aparecen.
-# Uso: sh scripts/generar-changelog.sh
+# Uso: sh scripts/generar-changelog.sh [version]   (ej. v3.0.0 al preparar una release)
 
 titulo() {
     case "$1" in
@@ -35,7 +35,7 @@ seccion() {
     echo "Generado automaticamente con \`scripts/generar-changelog.sh\` a partir de los commits (Conventional Commits)."
     echo
     anterior=HEAD
-    nombre="Sin publicar"
+    nombre="${1:-Sin publicar}"
     for tag in $(git tag --sort=-creatordate); do
         seccion "$tag..$anterior" "$nombre"
         anterior=$tag
