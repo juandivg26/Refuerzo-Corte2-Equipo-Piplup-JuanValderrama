@@ -535,7 +535,7 @@ Reto 12 — TDD de las 3 capas
 <img width="560" height="545" alt="imagen" src="https://github.com/user-attachments/assets/32a8ba2a-f357-459b-8d83-9068a9f7b2e6" />
 
 Reto 13 — JaCoCo + SonarQube Enterprise
-- [ ] 85% líneas, 75% ramas, 0 bugs, deuda < 15 min, duplicación < 3%
+- [x] 85% líneas, 75% ramas, 0 bugs, deuda < 15 min, duplicación < 3%
 - Evidencia:
 
   **Quality Gate de JaCoCo (`pom.xml`):**
@@ -564,6 +564,8 @@ Reto 13 — JaCoCo + SonarQube Enterprise
   | Regla | Archivo | Causa raíz | Corrección | Commit |
   |---|---|---|---|---|
   | `xml:S1135` (TODO pendiente) | `pom.xml` línea 101 | El comentario del quality gate decía "en **todo** el proyecto" y Sonar interpretó la palabra "todo" como una etiqueta TODO. No había ninguna tarea pendiente. | Se reformuló como "a nivel de proyecto", con el mismo significado. Es el mismo falso positivo que ya se había corregido en Prinplup (`java:S1135`). | `fix: reformular comentario del pom que Sonar leia como TODO (xml:S1135)` |
+<img width="861" height="509" alt="imagen" src="https://github.com/user-attachments/assets/85d9f112-2470-41cd-b13c-2af19c6e8f35" />
+<img width="563" height="358" alt="imagen" src="https://github.com/user-attachments/assets/fc856320-6657-4404-a465-18333d3086eb" />
 
 Reto 14 — Arquitectura por capas
 - [x] Auditoría de dependencias entre capas
