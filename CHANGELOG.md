@@ -2,12 +2,15 @@
 
 Generado automaticamente con `scripts/generar-changelog.sh` a partir de los commits (Conventional Commits).
 
-## Sin publicar
+## v3.0.0
 
 ### Funcionalidades
 - PlanificadorRuta y EjecutorRuta con reasignacion, cadena de custodia y notificacion de waypoints (Green)
 - cadena de validacion, decorator de telemetria y adapter de la API hidrica por capas (Empoleon reto 03)
 - streams de la red multi-embalse con eficiencia por zona, ruta multi-etapa y Collector propio (Empoleon reto 01)
+
+### Correcciones
+- reformular comentario del pom que Sonar leia como TODO (xml:S1135)
 
 ### Refactorizaciones
 - dividir los Main de Empoleon en metodos de maximo 15 lineas (estandar Enterprise)
@@ -22,6 +25,8 @@ Generado automaticamente con `scripts/generar-changelog.sh` a partir de los comm
 - pruebas del AnalizadorRedHidrica y del Collector en stream paralelo
 
 ### Documentacion
+- resultado de SonarQube de Empoleon en el reto 13
+- retos 05 a 11 de Empoleon (C4 nivel 2, RF/RNF, plantilla AP-15, design system con WCAG, roadmap Jira, CU y prompts)
 - evidencia de los retos 02, 04, 12, 13 y 14 de Empoleon y CHANGELOG actualizado
 - README de Empoleon con estructura por capas y evidencia de los retos 01, 02 y 03
 - CHANGELOG generado desde los commits
